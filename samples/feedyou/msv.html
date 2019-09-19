@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+  <link href="https://feedyou.azureedge.net/webchat/latest/botchat.css" rel="stylesheet" />
+  <link href="https://feedyou.azureedge.net/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
+  <title>MSV 2019 chatbot</title>
+  <style>
+     html { 
+       height: 100%;
+       background-color: white;
+
+        background: url('https://feedyou.blob.core.windows.net/webchat/gray-background.jpg') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
+    body {
+      font-family: Helvetica, Arial;
+      padding: 30px;
+
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-justify-content: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-align-items: flex-end;
+      -ms-flex-align: end;
+      align-items: flex-end;
+    }
+
+    #logo {
+      height: 120px;
+
+      background-color: transparent;
+      text-align: center;
+      padding-top: 0px;
+      padding-bottom: 5px;
+    }
+
+    #logo img {
+      max-height: 70%;
+      padding-top: 15px;
+      object-fit: contain;
+    }
+    
+    #bot-wrapper .wc-chatview-panel {
+      top: 0px;
+    }
+
+    .wc-suggested-actions .wc-hscroll > ul {
+      text-align: center;
+    }
+
+    .wc-header {
+      display: block !important;
+
+      max-width: 705px;
+      width: 95%;
+
+      left: initial;
+      right: initial;
+
+      background-color: #D83838;
+    }
+
+    .wc-message-groups {
+      top: 38px !important;
+      bottom: 0px !important;
+
+      position: relative;
+      max-width: 700px;
+      width: 95%;
+      height: 100%;
+    }
+
+    .wc-message-from {
+      visibility: hidden;
+    }
+
+    .wc-message-content {
+      padding: 10px;
+    }
+
+    .wc-message-pane.show-actions .wc-message-groups {
+      transform: translateY(-100px);
+    }
+
+    .wc-message-pane .wc-message-groups {
+      /* ANIMATE transform: translateY(-50px); */
+      transform: translateY(-100px);
+    }
+
+    .wc-message-pane {
+      height: 100%;
+      width: 100%;
+
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      justify-content: center;
+    }
+
+    .wc-suggested-actions {
+      bottom: 0px;
+    }
+
+    .wc-suggested-actions .wc-hscroll > ul > li {
+      margin: 6px;
+    }
+
+    /* ANIMATE .wc-message-pane.show-actions .wc-suggested-actions {
+      height: 50px;
+    }*/
+    .wc-message-pane .wc-suggested-actions {
+      height: 50px !important;
+    }
+    .wc-message-pane .wc-suggested-actions>div {
+      display: none;
+    }
+    .wc-message-pane.show-actions .wc-suggested-actions>div {
+      display: block;
+    }
+
+    .wc-chatview-panel {
+      width: 100%;
+      height: 100%;
+
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      justify-content: center;
+    }
+
+    /*#bot-wrapper .wc-message-groups {
+      border-left: 2px #00aa80 solid;
+      border-right: 2px #00aa80 solid;
+    } */
+
+    #iframe-overlay {
+      position: absolute;
+      top: -3px;
+      left: 0px;
+      right: 0px;
+      bottom: 50px;
+
+      z-index: 1000;
+      background-color: white;
+      border-bottom: 3px #D83838 solid;
+
+      -webkit-transition: max-height 0.5s ease-in-out;
+      -moz-transition: max-height 0.5s ease-in-out;
+      -o-transition: max-height 0.5s ease-in-out;
+      transition: max-height 0.5s ease-in-out;
+
+      overflow-y: hidden;
+    }
+
+    #bot-wrapper {
+      background-color: transparent;
+      width: 100%;
+      height: 1000px;
+      max-height: 98.5%;
+      min-height: 500px;
+
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+
+      position: absolute;
+      bottom: 0;
+    }
+
+    #bot-wrapper #bot {
+      position: relative;
+      height: 100%;
+      
+    }
+
+    .wc-console {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="iframe-overlay" style="max-height: 0;">
+    <iframe id="iframe" style="width: 100%; height: 100%;" src=""></iframe>
+  </div>
+  <div id="bot-wrapper">
+    <div id="logo">
+      <img src="https://feedyou.azureedge.net/webchat/feedyou_logo_red.png" alt="Logo" />
+    </div>
+    <div id="bot" />
+  </div>
+  <!--<script src="https://feedyou.azureedge.net/webchat/latest/botchat-es5.js"></script>-->
+  <script src="https://feedyou.blob.core.windows.net/webchat/latest/botchat-es5.js"></script>
+  <script>
+    function openIframe(url) {
+      console.log('URL', url)
+      document.getElementById('iframe-overlay').style.maxHeight = '100%';
+      document.getElementById('iframe').src = url
+    }
+
+    function closeIframe(url) {
+      document.getElementById('iframe-overlay').style.maxHeight = 0;
+      // TODO reset
+    }
+
+    var botConnection = new BotChat.DirectLine({ secret: 'JqtqUZx5_YI.YW2TnPh81wmBD4IlTY2Nu43riQ8w9b-53pkZcGyO2jo' });
+    BotChat.App({
+      botConnection,
+      bot: { id: 'feedbot-msv-2019', name: 'Chatbot' },
+      theme: { mainColor: '#D83838' },
+      disableInputWhenNotNeeded: true,
+      chatTitle: "MSV 2019 chatbot"
+      
+      // SEE https://github.com/wearefeedyou/feedbot-webchat FOR OPTIONAL PARAMS
+    }, document.getElementById("bot"));
+
+    botConnection.activity$
+      .filter(activity => console.log(activity) || activity.type === "event" && activity.name === "open-iframe")
+      .subscribe(activity => openIframe(activity.value))
+
+    botConnection.activity$
+      .filter(activity => activity.type === "event" && activity.name === "close-iframe")
+      .subscribe(activity => closeIframe())
+  </script>
+</body>
+
+</html>
