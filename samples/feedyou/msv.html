@@ -6,19 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 
-  <link href="https://feedyou.azureedge.net/webchat/latest/botchat.css" rel="stylesheet" />
-  <link href="https://feedyou.azureedge.net/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
+  <link href="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat.css" rel="stylesheet" />
+  <link href="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat-fullwindow.css" rel="stylesheet" />
   <title>MSV 2019 chatbot</title>
   <style>
      html { 
        height: 100%;
        background-color: white;
 
-        background: url('https://feedyou.blob.core.windows.net/webchat/gray-background.jpg') no-repeat center center fixed; 
+        /*background: url('https://feedyou.blob.core.windows.net/webchat/gray-background.jpg') no-repeat center center fixed; 
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
-        background-size: cover;
+        background-size: cover;*/
     }
 
     body {
@@ -43,7 +43,7 @@
     }
 
     #logo {
-      height: 120px;
+      height: 10%;
 
       background-color: transparent;
       text-align: center;
@@ -52,118 +52,31 @@
     }
 
     #logo img {
-      max-height: 70%;
+      max-height: 95%;
+      max-width: 70%;
       padding-top: 15px;
       object-fit: contain;
     }
     
-    #bot-wrapper .wc-chatview-panel {
-      top: 0px;
+    @media (min-width: 768px) {
+      .wc-adaptive-card {
+        width: 395px;  
+      }
     }
 
-    .wc-suggested-actions .wc-hscroll > ul {
-      text-align: center;
+    .wc-adaptive-card {
+      border-radius: 8px;
+      padding: 2px 6px;
     }
-
-    .wc-header {
-      display: block !important;
-
-      max-width: 705px;
-      width: 95%;
-
-      left: initial;
-      right: initial;
-
-      background-color: #D83838;
-    }
-
-    .wc-message-groups {
-      top: 38px !important;
-      bottom: 0px !important;
-
-      position: relative;
-      max-width: 700px;
-      width: 95%;
-      height: 100%;
-    }
-
-    .wc-message-from {
-      visibility: hidden;
-    }
-
-    .wc-message-content {
-      padding: 10px;
-    }
-
-    .wc-message-pane.show-actions .wc-message-groups {
-      transform: translateY(-100px);
-    }
-
-    .wc-message-pane .wc-message-groups {
-      /* ANIMATE transform: translateY(-50px); */
-      transform: translateY(-100px);
-    }
-
-    .wc-message-pane {
-      height: 100%;
-      width: 100%;
-
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      justify-content: center;
-    }
-
-    .wc-suggested-actions {
-      bottom: 0px;
-    }
-
-    .wc-suggested-actions .wc-hscroll > ul > li {
-      margin: 6px;
-    }
-
-    /* ANIMATE .wc-message-pane.show-actions .wc-suggested-actions {
-      height: 50px;
-    }*/
-    .wc-message-pane .wc-suggested-actions {
-      height: 50px !important;
-    }
-    .wc-message-pane .wc-suggested-actions>div {
-      display: none;
-    }
-    .wc-message-pane.show-actions .wc-suggested-actions>div {
-      display: block;
-    }
-
-    .wc-chatview-panel {
-      width: 100%;
-      height: 100%;
-
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      justify-content: center;
-    }
-
-    /*#bot-wrapper .wc-message-groups {
-      border-left: 2px #00aa80 solid;
-      border-right: 2px #00aa80 solid;
-    } */
 
     #iframe-overlay {
       position: absolute;
       top: -3px;
       left: 0px;
       right: 0px;
-      bottom: 50px;
+      bottom: 70px;
 
       z-index: 1000;
-
-      padding-bottom: 5px;
 
       -webkit-transition: top 0.5s ease-in-out;
       -moz-transition: top 0.5s ease-in-out;
@@ -175,13 +88,15 @@
 
     #iframe-overlay > iframe {
       border-width: 0px;
-      border-bottom: 3px #D83838 solid;
+      /*border-bottom: 3px #D83838 solid;*/
     }
 
     #bot-wrapper {
       background-color: transparent;
-      width: 100%;
-      height: 1000px;
+      width: 95%;
+      max-width: 900px;
+      min-width: 300px;
+      height: 96%;
       max-height: 98.5%;
       min-height: 500px;
 
@@ -198,37 +113,140 @@
 
     #bot-wrapper #bot {
       position: relative;
-      height: 100%;
-      
+      height: 90%;
+    }
+
+    .wc-message-from {
+      visibility: hidden;
+      height: 2px;
+    }
+
+    .wc-message-content {
+      padding: 10px;
+      border-radius: 13px;
+    }
+
+    .wc-message-from-bot .wc-message-content {
+      color: #424242 !important;
+    }
+
+    .wc-carousel {
+      margin-top: 10px;
+    }
+
+    .wc-suggested-actions .wc-hscroll > ul > li {
+      margin: 6px;
+    }
+
+    .wc-message-pane .wc-suggested-actions {
+      position: absolute;
+      bottom: 0px;
+      z-index: 10000;
+      background-color: white;
+    }
+
+    .wc-message-pane.show-actions .wc-suggested-actions {
+      height: 70px;
     }
 
     .wc-console {
-      display: none !important;
+      /*-webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.5);
+      -moz-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.5);
+      box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.5);*/
+      border-width: 0px;
+      height: 70px;
     }
+
+    .wc-message-pane.show-actions .wc-message-groups {
+      top: 0px;
+      transform: translateY(0px);
+    }
+
+    .wc-console.disable-input {
+      background-color: white !important;
+    }
+
+    #bot .wc-suggested-actions .wc-hscroll > ul > li button, .wc-app .wc-card button {
+      color: white !important;
+      background-color: #D83838 !important;
+      border-color: #D83838 !important;
+      border-radius: 20px;
+    }
+
+    #bot .wc-suggested-actions .wc-hscroll > ul > li button:active, .wc-app .wc-card button:active {
+      color: #D83838 !important;
+      background-color: white !important;
+      border-color: #D83838 !important;
+    }
+
+    #bot .wc-suggested-actions .wc-hscroll > ul > li button:focus, .wc-console .wc-mic, .wc-console .wc-send, .wc-app .wc-card button {
+      outline:0;
+    }
+
+    .wc-console .wc-mic, .wc-console .wc-send {
+      top: 10px;
+    }
+
+    .wc-console input[type=text], .wc-console textarea {
+      margin: 0px 15px;
+    }
+
+    .wc-textbox {
+      border-radius: 13px;
+      background-color: #eceff1;
+      height: 70%;
+      margin-bottom: 0px;
+      top: 6px !important;
+    }
+
+    .wc-suggested-actions .wc-hscroll > ul {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .wc-message-from-bot .wc-message-content {
+     background-color: #f5f5f5;
+    }
+
+    .wc-message-from-bot svg.wc-message-callout path {
+      fill: #f5f5f5;
+    }
+
+    .wc-message-content {
+     box-shadow: none;
+    }
+
+    .wc-app ::-webkit-scrollbar-thumb {
+      background-color: #fff;
+    }
+
+    .wc-app h1, .wc-app h2, .wc-app h3, .wc-app h4, .wc-app p, .wc-app ul, .wc-app ol {
+      padding: 4px;
+    }
+
   </style>
 </head>
 
 <body>
-  <div id="iframe-overlay" style="top: 100%;">
+  <div id="iframe-overlay" style="top: 99%;">
     <iframe id="iframe" style="width: 100%; height: 100%;" src=""></iframe>
   </div>
   <div id="bot-wrapper">
     <div id="logo">
-      <img src="https://feedyou.azureedge.net/webchat/feedyou_logo_red.png" alt="Logo" />
+      <img src="https://feedbotmsv20197268.blob.core.windows.net/public/msv-feedyou-loga-5.png" alt="Logo" />
     </div>
     <div id="bot" />
   </div>
-  <!--<script src="https://feedyou.azureedge.net/webchat/latest/botchat-es5.js"></script>-->
-  <script src="https://feedyou.blob.core.windows.net/webchat/latest/botchat-es5.js"></script>
+  <script src="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat-es5.js"></script>
+
   <script>
     function openIframe(url) {
-      console.log('URL', url)
       document.getElementById('iframe-overlay').style.top = '0%';
       document.getElementById('iframe').src = url
     }
 
     function closeIframe(url) {
-      document.getElementById('iframe-overlay').style.top = '100%';
+      document.getElementById('iframe-overlay').style.top = '99%';
       // TODO reset
     }
 
@@ -238,7 +256,8 @@
       bot: { id: 'feedbot-msv-2019', name: 'Chatbot' },
       theme: { mainColor: '#D83838' },
       disableInputWhenNotNeeded: true,
-      chatTitle: "MSV 2019 chatbot"
+      chatTitle: "MSV 2019 chatbot",
+      userData: { 'zdroj': window.location.hash.substr(1) }
       
       // SEE https://github.com/wearefeedyou/feedbot-webchat FOR OPTIONAL PARAMS
     }, document.getElementById("bot"));

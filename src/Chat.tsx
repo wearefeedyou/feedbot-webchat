@@ -204,31 +204,31 @@ export class Chat extends React.Component<ChatProps, {}> {
         let botConnection: any
         if (this.props.directLine) {
             botConnection = this.botConnection = new DirectLine(this.props.directLine)
-            botConnection.postActivityOriginal = botConnection.postActivity
-            
-            botConnection.postActivity = (activity: any) => {
-                // send userData only once during initial event
-                if (activity.name === 'beginIntroDialog') {
-                    const newActivity = {
-                        ...activity,
-                        channelData: {
-                            ...activity.channelData,
-                            userData: {
-                                ...(this.props.userData || {}),
-                                ...(window.location.hash === '#feedbot-test-mode' ? { testMode: true } : {}),
-                                ...getGoogleAnalyticsUserData(),
-                                ...getReferrerUserData()
-                            }
-                        }
-                    };
-                    console.log('userData', newActivity.channelData.userData)
-                    return botConnection.postActivityOriginal(newActivity);
-                } else {
-                    return botConnection.postActivityOriginal(activity);
-                }
-            }
         } else {
             botConnection = this.props.botConnection
+        }
+
+        botConnection.postActivityOriginal = botConnection.postActivity
+        botConnection.postActivity = (activity: any) => {
+            // send userData only once during initial event
+            if (activity.name === 'beginIntroDialog') {
+                const newActivity = {
+                    ...activity,
+                    channelData: {
+                        ...activity.channelData,
+                        userData: {
+                            ...(this.props.userData || {}),
+                            ...(window.location.hash === '#feedbot-test-mode' ? { testMode: true } : {}),
+                            ...getGoogleAnalyticsUserData(),
+                            ...getReferrerUserData()
+                        }
+                    }
+                };
+                console.log('userData', newActivity.channelData.userData)
+                return botConnection.postActivityOriginal(newActivity);
+            } else {
+                return botConnection.postActivityOriginal(activity);
+            }
         }
 
         if (this.props.resize === 'window')
