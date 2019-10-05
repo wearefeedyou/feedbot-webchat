@@ -60,7 +60,7 @@
     
     @media (min-width: 768px) {
       .wc-adaptive-card {
-        width: 395px;  
+        width: 300px;  
       }
     }
 
@@ -212,6 +212,10 @@
       fill: #f5f5f5;
     }
 
+    .wc-suggested-actions .wc-hscroll > ul > li {
+      max-width: 50%;
+    }
+
     .wc-message-content {
      box-shadow: none;
     }
@@ -237,7 +241,7 @@
     </div>
     <div id="bot" />
   </div>
-  <script src="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat-es5.js"></script>
+  <script src="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat-es5.js?v=2"></script>
 
   <script>
     function openIframe(url) {
@@ -263,7 +267,7 @@
     }, document.getElementById("bot"));
 
     botConnection.activity$
-      .filter(activity => console.log(activity) || activity.type === "event" && activity.name === "open-iframe")
+      .filter(activity => activity.type === "event" && activity.name === "open-iframe")
       .subscribe(activity => openIframe(activity.value))
 
     botConnection.activity$

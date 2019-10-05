@@ -27,10 +27,10 @@ export const App = (props: AppProps, container?: HTMLElement) => {
     }
 
     // FEEDYOU use twemoji to make emoji compatible
-    const script = document.createElement("script");
+    /*const script = document.createElement("script");
     script.src = "https://twemoji.maxcdn.com/2/twemoji.min.js?11.2";
     script.async = true;
-    document.body.appendChild(script);
+    document.body.appendChild(script);*/
 
     const style = document.createElement('style');
     style.type = 'text/css';
