@@ -8,6 +8,32 @@
 
   <link href="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat.css" rel="stylesheet" />
   <link href="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat-fullwindow.css" rel="stylesheet" />
+
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/originals/ezgif-com-resize-5.gif" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/17160-abb-yumi-573x300-f.JPG" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/ar-upraveno.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vr-upraveno.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vyrobek-6-rotate.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vyrobek-3.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vyrobek-1.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vyrobek-4.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vyrobek-2.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/vyrobek-5.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/adastra-transparent.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/beckhoff-upraveno-na-sirku.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/rockwell-upraveno.JPG" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/tovarna.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/hardwario-upraveno.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/predu-upraveno.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/gesteem-upraveno.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/dell.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/artex-transparent.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/infotec-upraveno.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/plantyst.jpg" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/dorps-upraveno.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/unicorn-transparent.png" as="image" />
+  <link rel="preload" href="https://feedbotmsv20197268.blob.core.windows.net/upload/thumbnails/osisoft-logo.jpg" as="image" />
+
   <title>MSV 2019 chatbot</title>
   <style>
      html { 
@@ -256,19 +282,23 @@
   <script src="https://feedbotmsv20197268.blob.core.windows.net/public/webchat/botchat-es5.js?v=2"></script>
 
   <script>
+    var frame = document.getElementById("iframe");
+    var overlay = document.getElementById('iframe-overlay')
+
     function openIframe(url) {
-      document.getElementById('iframe-overlay').style.top = '0%';
-      document.getElementById('iframe').src = url
+      console.log('Opening iframe '+url)
+      overlay.style.top = '0%';
+      frame.src = url
     }
 
     function closeIframe(url) {
-      document.getElementById('iframe-overlay').style.top = '99%';
+      console.log('Closing iframe')
+      overlay.style.top = '99%';
       
       setTimeout(function() {
-        var frame = document.getElementById("iframe");
         if (frame && frame.src) frame.src = "about:blank";
       }, 1000);
-    }
+    }    
 
     var botConnection = new BotChat.DirectLine({ secret: 'JqtqUZx5_YI.YW2TnPh81wmBD4IlTY2Nu43riQ8w9b-53pkZcGyO2jo' });
     BotChat.App({
