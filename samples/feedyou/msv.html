@@ -69,12 +69,24 @@
       padding: 2px 6px;
     }
 
+    /* carousel bez tlacitek */
+    .format-markdown~div .wc-adaptive-card {
+      height: 302px;
+    }
+
+    /* carousel s tlacitky */
+    .format-plain~div .wc-adaptive-card {
+      
+    }
+
     #iframe-overlay {
       position: absolute;
       top: -3px;
       left: 0px;
       right: 0px;
       bottom: 70px;
+
+      background: url(https://feedbotmsv20197268.blob.core.windows.net/public/spinner.gif) white no-repeat 50%;
 
       z-index: 1000;
 
@@ -213,7 +225,7 @@
     }
 
     .wc-suggested-actions .wc-hscroll > ul > li {
-      max-width: 50%;
+      max-width: 60%;
     }
 
     .wc-message-content {
@@ -233,11 +245,11 @@
 
 <body>
   <div id="iframe-overlay" style="top: 99%;">
-    <iframe id="iframe" style="width: 100%; height: 100%;" src=""></iframe>
+    <iframe sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts" id="iframe" style="width: 100%; height: 100%;" src=""></iframe>
   </div>
   <div id="bot-wrapper">
     <div id="logo">
-      <img src="https://feedbotmsv20197268.blob.core.windows.net/public/msv-feedyou-loga-5.png" alt="Logo" />
+      <img src="https://feedbotmsv20197268.blob.core.windows.net/public/msv-feedyou-loga-6.png" alt="Logo" />
     </div>
     <div id="bot" />
   </div>
@@ -251,7 +263,11 @@
 
     function closeIframe(url) {
       document.getElementById('iframe-overlay').style.top = '99%';
-      // TODO reset
+      
+      setTimeout(function() {
+        var frame = document.getElementById("iframe");
+        if (frame && frame.src) frame.src = "about:blank";
+      }, 1000);
     }
 
     var botConnection = new BotChat.DirectLine({ secret: 'JqtqUZx5_YI.YW2TnPh81wmBD4IlTY2Nu43riQ8w9b-53pkZcGyO2jo' });
