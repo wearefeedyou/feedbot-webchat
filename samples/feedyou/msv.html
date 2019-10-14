@@ -279,7 +279,7 @@
   </div>
   <div id="bot-wrapper">
     <div id="logo">
-      <img src="https://feedbotmsv20197268.blob.core.windows.net/public/msv-feedyou-loga-6.png" alt="Logo" />
+      <a href="#" onclick="reload()"><img src="https://feedbotmsv20197268.blob.core.windows.net/public/msv-feedyou-loga-6.png" alt="Logo" /></a>
     </div>
     <div id="bot" />
   </div>
@@ -288,6 +288,11 @@
   <script>
     var frame = document.getElementById("iframe");
     var overlay = document.getElementById('iframe-overlay')
+
+    function reload() {
+      if (confirm('Chcete se vrátit za začátek stezky Digitální továrny 2.0?')) location.reload()
+      return false;
+    }
 
     function openIframe(url) {
       console.log('Opening iframe '+url)
