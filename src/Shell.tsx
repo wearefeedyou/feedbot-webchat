@@ -7,36 +7,51 @@ import { Strings } from './Strings';
 import { Speech } from './SpeechModule'
 import { ChatActions, ListeningState, sendMessage, sendFiles, sendScreenshot } from './Store';
 import { isSafari } from "./App"
-
 import * as html2canvas from 'html2canvas'
+import * as QRCode from 'qrcode'
+
+import { StyledDropZone } from 'react-drop-zone'
 
 interface Props {
     inputText: string,
     strings: Strings,
     listeningState: ListeningState,
     showUploadButton: boolean,
+    attachmentUrl: string,
     disableInput: boolean
 
     onChangeText: (inputText: string) => void
 
     sendMessage: (inputText: string) => void,
-    sendFiles: (files: FileList) => void,
+    sendFiles: (files: any) => void,
     sendScreenshot: (screen: string) => void,
     stopListening: () => void,
     startListening: () => void
+}
+
+interface State {
+    attachmentQrCode: string
 }
 
 export interface ShellFunctions {
     focus: (appendKey?: string) => void
 }
 
-class ShellContainer extends React.Component<Props> implements ShellFunctions {
-    private textInput: HTMLTextAreaElement;
+class ShellContainer extends React.Component<Props, State> implements ShellFunctions {
+    private textInput: HTMLInputElement;
     private fileInput: HTMLInputElement;
 
     componentDidUpdate(prevProps: Props) {
         if (prevProps.disableInput === true && this.props.disableInput === false) {
             this.textInput.focus();
+        }
+        if (this.props.attachmentUrl && (!this.state)) {
+            QRCode.toDataURL(this.props.attachmentUrl, {
+                color: {
+                dark: '#000',
+                light: '#0000' // transparent
+                }
+            }).then((attachmentQrCode:string) => this.setState({attachmentQrCode}))
         }
     }
 
@@ -109,8 +124,13 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
         })
         this.props.sendScreenshot(screen);
     }
+    addFile(file: File) {
+
+        this.props.sendFiles([file]);
+    }
 
     render() {
+        console.log('SHELL PROPS', this.props)
         const className = classList(
             'wc-console',
             this.props.inputText.length > 0 && 'has-text',
@@ -122,7 +142,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
 
         const sendButtonClassName = classList(
             'wc-send',
-            showMicButton && 'hidden'
+            showMicButton || (this.props.showUploadButton && this.props.disableInput) && 'hidden'
         );
 
         const micButtonClassName = classList(
@@ -163,13 +183,24 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
                     />
                 }
                 {
+                    //TODO: replace showUploadButton with new flag which enables qr code and dropzone
+                    this.props.showUploadButton && false &&  
+                        [
+                            <StyledDropZone label="Click to select file or drop it here" onDrop={(file:any) => this.addFile(file) } />,
+                            <div className="attachment-wrapper">
+                                <span className="attachment-url">To upload from another device scan or click QR code</span>
+                                <a href="#" onClick={() => alert('Please visit following address on device you want to upload from:\n\n'+this.props.attachmentUrl)}><img src={this.state && this.state.attachmentQrCode} style={{height: 90}} /></a>
+                            </div>
+                        ]
+                }
+                {
                     this.props.showUploadButton &&
                     <button className="wc-upload-screenshot" onClick={() => { this.takeScreenshot() }}><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#8a8a8a" d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg></button>
                 }
                 <div className="wc-textbox">
                     <textarea
                         className="wc-shellinput"
-                        ref={input => this.textInput = input}
+                        ref={input => this.textInput = input as any as HTMLInputElement}
                         autoFocus
                         value={this.props.inputText}
                         onChange={_ => this.props.onChangeText(this.textInput.value)}
@@ -218,6 +249,7 @@ export const Shell = connect(
         // passed down to ShellContainer
         inputText: state.shell.input,
         showUploadButton: state.format.showUploadButton,
+        attachmentUrl:state.format.attachmentUrl,
         disableInput: state.format.disableInput,
         strings: state.format.strings,
         // only used to create helper functions below
@@ -238,6 +270,7 @@ export const Shell = connect(
     inputText: stateProps.inputText,
     showUploadButton: stateProps.showUploadButton,
     disableInput: stateProps.disableInput,
+    attachmentUrl: stateProps.attachmentUrl,
     strings: stateProps.strings,
     listeningState: stateProps.listeningState,
     // from dispatchProps
