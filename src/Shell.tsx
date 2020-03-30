@@ -18,6 +18,7 @@ interface Props {
     listeningState: ListeningState,
     showUploadButton: boolean,
     attachmentUrl: string,
+    uploadUsingQrCodeOnly: boolean,
     disableInput: boolean
 
     onChangeText: (inputText: string) => void
@@ -135,7 +136,6 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
     }
 
     render() {
-        console.log('SHELL PROPS', this.props)
         const className = classList(
             'wc-console',
             this.props.inputText.length > 0 && 'has-text',
@@ -158,7 +158,22 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
         );
 
         const placeholder = this.props.listeningState === ListeningState.STARTED ? this.props.strings.listeningIndicator : this.props.strings.consolePlaceholder;
+        
+        const localAndQrAttachment = [
+            <StyledDropZone key="a" label={this.props.strings.attachmentDropArea} onDrop={(file:any) => this.addFile(file) } />,
+            <div key="b" className="attachment-wrapper">
+                <span className="attachment-url">{this.props.strings.attachmentInfo}</span>
+                <a href="#" onClick={() => alert(this.props.strings.attachmentAlert + '\n\n'+this.props.attachmentUrl)}><img src={this.state && this.state.attachmentQrCode} /></a>
+            </div>
+        ]
 
+        const qrOnlyAttachment = [
+            <div key="b" className="attachment-wrapper qr-only">
+                <span className="attachment-url">{this.props.strings.attachmentInfoQrOnly}<br /><span>{this.props.attachmentUrl}</span></span>
+                <a href="#" onClick={() => alert(this.props.strings.attachmentAlert + '\n\n'+this.props.attachmentUrl)}><img src={this.state && this.state.attachmentQrCode} /></a>
+            </div>
+        ]
+        
         return (
             <div className={className}>
                 {
@@ -189,7 +204,7 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
                 }
                 {
                     //TODO: replace showUploadButton with new flag which enables qr code and dropzone
-                    this.props.showUploadButton && false &&  
+                    this.props.showUploadButton && (this.props.uploadUsingQrCodeOnly ? qrOnlyAttachment : localAndQrAttachment) &&  
                         [
                             <StyledDropZone key="a" label="Click to select file or drop it here" onDrop={(file:any) => this.addFile(file) } />,
                             <div key="b" className="attachment-wrapper">
@@ -197,7 +212,7 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
                                 <a href="#" onClick={() => alert('Please visit following address on device you want to upload from:\n\n'+this.props.attachmentUrl)}><img src={this.state && this.state.attachmentQrCode} style={{height: 90}} /></a>
                             </div>
                         ]
-                }
+                }     
                 {
                     this.props.showUploadButton &&
                     <button className="wc-upload-screenshot" onClick={() => { this.takeScreenshot() }}><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#8a8a8a" d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg></button>
@@ -256,6 +271,7 @@ export const Shell = connect(
         showUploadButton: state.format.showUploadButton,
         attachmentUrl:state.format.attachmentUrl,
         disableInput: state.format.disableInput,
+        uploadUsingQrCodeOnly: state.format.uploadUsingQrCodeOnly,
         strings: state.format.strings,
         // only used to create helper functions below
         locale: state.format.locale,
@@ -275,6 +291,7 @@ export const Shell = connect(
     inputText: stateProps.inputText,
     showUploadButton: stateProps.showUploadButton,
     disableInput: stateProps.disableInput,
+    uploadUsingQrCodeOnly: stateProps.uploadUsingQrCodeOnly,
     attachmentUrl: stateProps.attachmentUrl,
     strings: stateProps.strings,
     listeningState: stateProps.listeningState,

@@ -173,6 +173,7 @@ export interface FormatState {
     locale: string,
     showUploadButton: boolean,
     attachmentUrl: string,
+    uploadUsingQrCodeOnly: boolean,
     disableInput: boolean,
     disableInputWhenNotNeeded: boolean
     strings: Strings,
@@ -192,6 +193,7 @@ export type FormatAction = {
     type: 'Toggle_Upload_Button',
     showUploadButton: boolean
     attachmentUrl?: string
+    uploadUsingQrCodeOnly?: boolean
 } | {
     type: 'Toggle_Disable_Input',
     disableInput: boolean
@@ -208,6 +210,7 @@ export const format: Reducer<FormatState> = (
         attachmentUrl: null,
         disableInput: false,
         disableInputWhenNotNeeded: false,
+        uploadUsingQrCodeOnly: false,
         strings: defaultStrings,
         carouselMargin: undefined
     },
@@ -235,6 +238,7 @@ export const format: Reducer<FormatState> = (
                 ...state,
                 showUploadButton: action.showUploadButton,
                 attachmentUrl: action.attachmentUrl,
+                uploadUsingQrCodeOnly: action.hasOwnProperty('uploadUsingQrCodeOnly') ? action.uploadUsingQrCodeOnly : state.uploadUsingQrCodeOnly
             };
         case 'Toggle_Disable_Input':
             return {
