@@ -43,6 +43,12 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
     private fileInput: HTMLInputElement;
     private addFileTimeout: any
 
+    private sendMessage() {
+        if (this.props.inputText.trim().length > 0) {
+            this.props.sendMessage(this.props.inputText);
+        }
+    }
+
     componentDidUpdate(prevProps: Props) {
         if (prevProps.disableInput === true && this.props.disableInput === false) {
             this.textInput.focus();
@@ -54,13 +60,6 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
                 light: '#0000' // transparent
                 }
             }).then((attachmentQrCode:string) => this.setState({attachmentQrCode}))
-        }
-    }
-
-    private sendMessage() {
-        if (this.props.inputText.trim().length > 0) {
-            this.props.sendMessage(this.props.inputText);
-
         }
     }
 
