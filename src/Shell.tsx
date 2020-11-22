@@ -60,6 +60,7 @@ class ShellContainer extends React.Component<Props, State> implements ShellFunct
     private sendMessage() {
         if (this.props.inputText.trim().length > 0) {
             this.props.sendMessage(this.props.inputText);
+
         }
     }
 
