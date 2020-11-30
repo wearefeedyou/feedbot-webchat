@@ -8,6 +8,7 @@ import * as konsole from './Konsole';
 export type Theme = {
     mainColor: string
     template: any,
+    customCss?: string
 }
 
 export type AppProps = ChatProps & {theme?: Theme, header?: {textWhenCollapsed?: string, text: string}, autoExpandTimeout?: number};
@@ -53,10 +54,18 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
             // TODO configurable template system based on config
             const config = body.config
             if (config && config.template) {
-                props.theme = {...props.theme, template: {...(props.theme ? props.theme.template : {}), ...config.template}, mainColor: config.mainColor || props.theme.mainColor}
+                props.theme = {...props.theme, template: {...config.template, ...(props.theme ? props.theme.template : {})}, mainColor: config.mainColor || props.theme.mainColor}
 
                 if (config.showInput === 'auto') {
                   props.disableInputWhenNotNeeded = true
+                }
+
+                if (config.template.autoExpandTimeout > 0) {
+                  props.autoExpandTimeout = config.template.autoExpandTimeout
+                }
+
+                if (config.customCss) {
+                  props.theme.customCss = config.customCss
                 }
 
                 if (config.template.headerText) {
@@ -70,6 +79,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
 
         } catch (err) {
             console.error('Token response error', err)
+            return
         }
     }
 
@@ -379,7 +389,7 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 100%;
     padding: 0px;
 
-    background-image: url(https://cdn.feedyou.ai/webchat/message-icon.png);
+    background-image: url(${theme.template.iconUrl || 'https://cdn.feedyou.ai/webchat/message-icon.png'});
     background-size: 50px 50px;
     background-position: 12px 12px;
     background-repeat: no-repeat;
@@ -451,7 +461,7 @@ const ExpandableBarTheme = (theme: Theme) => `
 
     -webkit-box-shadow: 0px 0px 10px 0px rgba(167, 167, 167, 0.35);
     -moz-box-shadow: 0px 0px 10px 0px rgba(167, 167, 167, 0.35);
-    box-shadow: 0px 0px 10px 0px rgba(167, 167, 167, 0.35);
+    box-shadow: 0px 0px 10px 0px rgba(167, 167, 167, 0.5);
   }
 
   .feedbot-wrapper.collapsed > .feedbot {
@@ -464,6 +474,10 @@ const ExpandableBarTheme = (theme: Theme) => `
 
   .feedbot-wrapper.collapsed .feedbot-header {
       padding-top: 10px;
+  }
+
+  .feedbot-wrapper .wc-adaptive-card, .feedbot-wrapper .wc-card {
+    max-width: 337px !important;
   }
 
   ${BaseTheme(theme)}
@@ -659,4 +673,6 @@ const BaseTheme = (theme: Theme) => `
     .feedbot-wrapper .wc-carousel {
         margin-top: 10px;
     }
+
+    ${theme.customCss || ''}
   `
