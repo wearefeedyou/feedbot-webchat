@@ -54,7 +54,11 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
             // TODO configurable template system based on config
             const config = body.config
             if (config && config.template) {
-                props.theme = {...props.theme, template: {...config.template, ...(props.theme ? props.theme.template : {})}, mainColor: config.mainColor || props.theme.mainColor}
+                props.theme = {...props.theme, template: {...config.template, ...(props.theme ? props.theme.template : {})}}
+
+                if (config.mainColor) {
+                  props.theme.mainColor = config.mainColor  
+                } 
 
                 if (config.showInput === 'auto') {
                   props.disableInputWhenNotNeeded = true
