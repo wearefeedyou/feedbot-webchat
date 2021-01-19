@@ -258,10 +258,10 @@ export class Chat extends React.Component<ChatProps, {}> {
                         }
                     }
                 };
-                console.log('User data', newActivity.channelData.userData)
+                konsole.log('User data', newActivity.channelData.userData)
                 return botConnection.postActivityOriginal(newActivity);
             } else if (this.smartsupp && activity.type === "message") {
-                console.log('Smartsupp send', activity.text, activity)
+                konsole.log('Smartsupp send', activity.text, activity)
                 this.smartsupp.chatMessage({
                     content: {
                         type: 'text',
@@ -291,7 +291,7 @@ export class Chat extends React.Component<ChatProps, {}> {
 
         // FEEDYOU - support "start over" button
         this.props.startOverTrigger && this.props.startOverTrigger(() => {
-            console.log('starting over')
+            konsole.log('Starting over')
             sendPostBack(botConnection, "start over", {}, this.props.user, this.props.locale)
         })
         window.addEventListener('feedbot:start-over', () => {
@@ -396,7 +396,7 @@ export class Chat extends React.Component<ChatProps, {}> {
     }
 
     smartsuppHandoff(options: SmartsuppHandoffOptions) {
-        console.log('SMARTSUPP HANDOFF')
+        konsole.log('SMARTSUPP HANDOFF')
 
         this.smartsupp = createVisitorClient({
             data: {
@@ -415,7 +415,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         })
 
         this.smartsupp.connect().then(() => {
-            console.log('Smartsupp connected')
+            konsole.log('Smartsupp connected')
 
             this.smartsupp.chatMessage({
                 content: {
@@ -429,7 +429,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         
         this.smartsupp.on('chat.message_received', (data) => {
             if (data.message.subType === MessageSubType.Agent) {
-                console.log('Smartsupp receive', data.message.content.text, data)
+                konsole.log('Smartsupp receive', data.message.content.text, data)
 
                 this.store.dispatch<ChatActions>({ type: 'Receive_Message', activity: {
                     from: { id: this.props.bot.id, name: this.props.bot.name},
@@ -653,7 +653,6 @@ function getLocaleUserData(locale?: string) {
 }
 
 function trackFacebookPixelEvent(eventName: string) {
-    console.log('Tracking FB Pixel custom event ' + eventName)
     if (typeof fbq === 'function') {
         console.log('Tracking FB Pixel custom event ' + eventName)
         fbq('trackCustom', eventName);

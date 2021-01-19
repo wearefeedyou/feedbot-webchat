@@ -63,7 +63,6 @@ export function renderFullScreenTemplate(props: AppProps) {
     logo.className = "feedbot-logo";
     
     const logoImg = document.createElement('img')
-    console.log('render fullscreen', props.theme)
     logoImg.src = props.theme && props.theme.template && props.theme.template.logoUrl || "https://cdn.feedyou.ai/webchat/feedyou_logo_red.png"
     logoImg.alt = "Logo"
     logo.appendChild(logoImg)
