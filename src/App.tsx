@@ -39,7 +39,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
                 })
             })
             const body = await response.json()
-            console.log('Token response', body)
+            konsole.log('Token response', body)
 
             props.botConnection = new DirectLine({...(props.directLine || {}), token: body.token});
             delete props.directLine
@@ -300,7 +300,7 @@ const FullScreenTheme = (theme: Theme) =>`
   }
 
   .wc-console .wc-mic, .wc-console .wc-send {
-    top: 10px;
+    top: 10px !important;
   }
 
   .wc-console input[type=text], .wc-console textarea {
@@ -379,6 +379,25 @@ const ExpandableKnobTheme = (theme: Theme) => `
   body .feedbot-header {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+  }
+
+  body .feedbot-wrapper .wc-chatview-panel {
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
+  .wc-app .wc-console {
+    background-color: white;
+    border-width: 0px;
+    border-top: 1px solid #dbdee1;
+  } 
+
+  .wc-app .wc-console .wc-textbox {
+    left: 20px;
+  } 
+
+  .wc-app .wc-console .wc-send {
+    top: 4px;
   }
 
   body .feedbot-wrapper.collapsed {
@@ -605,6 +624,10 @@ const BaseTheme = (theme: Theme) => `
         border-radius: 5px;
         background-color: ${theme.mainColor} !important;
         border-color: ${theme.mainColor} !important;
+
+        flex: auto;
+        text-overflow: initial;
+        white-space: initial;
     }
 
     .feedbot-wrapper .wc-app .wc-card button:active {
