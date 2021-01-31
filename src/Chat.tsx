@@ -76,6 +76,7 @@ export class Chat extends React.Component<ChatProps, {}> {
     private gaEventsSubscription: Subscription;
     private gtmEventsSubscription: Subscription;
     private handoffSubscription: Subscription;
+    private availableOperatorsCountSubscription: Subscription;
     private webchatCollapseSubscribtion: Subscription;
     private redirectSubscribtion: Subscription;
     private connectionStatusSubscription: Subscription;
@@ -96,6 +97,7 @@ export class Chat extends React.Component<ChatProps, {}> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     private _smartsuppHandoff = this.smartsuppHandoff.bind(this);
+    private _availableOperatorsCount = this.availableOperatorsCount.bind(this);
 
     constructor(props: ChatProps) {
         super(props);
@@ -317,6 +319,10 @@ export class Chat extends React.Component<ChatProps, {}> {
             .filter((activity: any) => activity.type === "event" && activity.name === "handoff")
             .subscribe((activity: any) => this._smartsuppHandoff(JSON.parse(activity.value)))
 
+        this.availableOperatorsCountSubscription = botConnection.activity$
+            .filter((activity: any) => activity.type === "event" && activity.name === "available-operators-count")
+            .subscribe((activity: any) => this._availableOperatorsCount(JSON.parse(activity.value)))
+
         this.webchatCollapseSubscribtion = botConnection.activity$
             .filter((activity: any) => activity.type === "event" && activity.name === "webchat-collapse")
             .subscribe(() => {
@@ -421,7 +427,6 @@ export class Chat extends React.Component<ChatProps, {}> {
             konsole.log('Smartsupp connected')
             
             this.smartsuppClient = client
-            callback && callback()
         }).catch((err) => {
             console.error('Cannot init Smartsupp client', err) 
         })
@@ -429,6 +434,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         client.on('initialized', (data) => {
             console.log('Smartsupp initialized', data.account.status, data)
             this.smartsuppOnline = data.account.status === AccountStatus.Online
+            callback && callback()
         })
 
         client.on('account.status_updated', (status) => {
@@ -470,11 +476,27 @@ export class Chat extends React.Component<ChatProps, {}> {
         }   
     }
 
+    availableOperatorsCount(options: SmartsuppHandoffOptions) {
+        this.smartsuppInit(options, () => {
+            const availableOperatorsCount = this.smartsuppOnline ? 1 : 0
+            this.botConnection.postActivity({
+                from: this.props.user,
+                name: 'availableOperatorsCount',
+                type: 'event',
+                value: availableOperatorsCount
+            }).subscribe(() => {
+                konsole.log('sent event availableOperatorsCount', availableOperatorsCount);
+            });
+        })
+    }
+
     componentWillUnmount() {
         this.fbPixelEventsSubscription.unsubscribe();
         this.gaEventsSubscription.unsubscribe();
         this.gtmEventsSubscription.unsubscribe();
         this.handoffSubscription.unsubscribe();
+        this.availableOperatorsCountSubscription.unsubscribe();
+        
         this.webchatCollapseSubscribtion.unsubscribe();
         this.redirectSubscribtion.unsubscribe();
         this.connectionStatusSubscription.unsubscribe();
