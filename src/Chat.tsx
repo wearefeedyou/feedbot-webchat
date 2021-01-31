@@ -424,15 +424,14 @@ export class Chat extends React.Component<ChatProps, {}> {
         })
 
         client.connect().then(() => {
-            konsole.log('Smartsupp connected')
-            
-            this.smartsuppClient = client
+            console.log('Smartsupp connected')
         }).catch((err) => {
             console.error('Cannot init Smartsupp client', err) 
         })
         
         client.on('initialized', (data) => {
             console.log('Smartsupp initialized', data.account.status, data)
+            this.smartsuppClient = client
             this.smartsuppOnline = data.account.status === AccountStatus.Online
             callback && callback()
         })
@@ -443,7 +442,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         })
 
         client.on('chat.message_received', (data) => {
-            if (data.message.subType === MessageSubType.Agent) {
+            if (data.message.subType !== MessageSubType.Contact) {
                 konsole.log('Smartsupp receive', data.message.content.text, data)
                 this.smartsuppActive = true
 
