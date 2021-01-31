@@ -14,7 +14,7 @@ import { ActivityOrID, FormatOptions } from './Types';
 import * as konsole from './Konsole';
 import { getTabIndex } from './getTabIndex';
 import { ConnectionStatus } from 'botframework-directlinejs';
-import { createVisitorClient, VisitorClient, MessageSubType } from 'smartsupp-websocket'
+import { createVisitorClient, VisitorClient, MessageSubType, AccountStatus } from 'smartsupp-websocket'
 
 declare const fbq: Function;
 declare const dataLayer: Array<Object>;
@@ -84,7 +84,9 @@ export class Chat extends React.Component<ChatProps, {}> {
     private historyRef: React.Component;
     private chatviewPanelRef: HTMLElement;
 
-    private smartsupp: VisitorClient
+    private smartsuppClient: VisitorClient
+    private smartsuppActive: boolean = false
+    private smartsuppOnline: boolean = false
 
     private resizeListener = () => this.setSize();
 
@@ -260,9 +262,9 @@ export class Chat extends React.Component<ChatProps, {}> {
                 };
                 konsole.log('User data', newActivity.channelData.userData)
                 return botConnection.postActivityOriginal(newActivity);
-            } else if (this.smartsupp && activity.type === "message") {
+            } else if (this.smartsuppActive && activity.type === "message") {
                 konsole.log('Smartsupp send', activity.text, activity)
-                this.smartsupp.chatMessage({
+                this.smartsuppClient.chatMessage({
                     content: {
                         type: 'text',
                         text: activity.text,
@@ -280,6 +282,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         this.store.dispatch<ChatActions>({ type: 'Start_Connection', user: this.props.user, bot: this.props.bot, botConnection, selectedActivity: this.props.selectedActivity });
         
         // setTimeout(() => this.smartsuppHandoff({key: '8f2622df0b638f00440671a5fb471919ff3cfea1'}), 10000)
+        //this.smartsuppInit({key: '8f2622df0b638f00440671a5fb471919ff3cfea1'})
 
         // FEEDYOU - TECHNICAL ISSUES MESSAGE
         // this.handleIncomingActivity({ id: 'maintenance', type: 'message', from: { name: "Chatbot", ...this.props.bot }, text: "Dobrý den, aktuálně mám technické problémy, které kolegové intenzivně řeší. Je možné, že nebudu reagovat úplně správně, moc se za to omlouvám. Prosím zkuste si se mnou popovídat později.", timestamp: new Date().toISOString()});
@@ -395,10 +398,10 @@ export class Chat extends React.Component<ChatProps, {}> {
         }
     }
 
-    smartsuppHandoff(options: SmartsuppHandoffOptions) {
-        konsole.log('SMARTSUPP HANDOFF')
+    smartsuppInit(options: SmartsuppHandoffOptions, callback?: () => void) {
+        console.log('Smartsupp init', options)
 
-        this.smartsupp = createVisitorClient({
+        const client = createVisitorClient({
             data: {
                 id: this.props.user.id,
                 key: options.key,
@@ -414,22 +417,29 @@ export class Chat extends React.Component<ChatProps, {}> {
             }
         })
 
-        this.smartsupp.connect().then(() => {
+        client.connect().then(() => {
             konsole.log('Smartsupp connected')
-
-            this.smartsupp.chatMessage({
-                content: {
-                    type: 'text',
-                    text: options.notification || '🤖',
-                },
-            })
+            
+            this.smartsuppClient = client
+            callback && callback()
         }).catch((err) => {
-            console.error(err) 
+            console.error('Cannot init Smartsupp client', err) 
         })
         
-        this.smartsupp.on('chat.message_received', (data) => {
+        client.on('initialized', (data) => {
+            console.log('Smartsupp initialized', data.account.status, data)
+            this.smartsuppOnline = data.account.status === AccountStatus.Online
+        })
+
+        client.on('account.status_updated', (status) => {
+            console.log('Smartsupp initialized', status)
+            this.smartsuppOnline = status === AccountStatus.Online
+        })
+
+        client.on('chat.message_received', (data) => {
             if (data.message.subType === MessageSubType.Agent) {
                 konsole.log('Smartsupp receive', data.message.content.text, data)
+                this.smartsuppActive = true
 
                 this.store.dispatch<ChatActions>({ type: 'Receive_Message', activity: {
                     from: { id: this.props.bot.id, name: this.props.bot.name},
@@ -439,6 +449,25 @@ export class Chat extends React.Component<ChatProps, {}> {
                 } });      
             }  
         })
+    }
+
+    smartsuppHandoff(options: SmartsuppHandoffOptions) {
+        const handoff = () => {
+            console.log('Smartsupp handoff', options)
+            this.smartsuppActive = true
+            this.smartsuppClient.chatMessage({
+                content: {
+                    type: 'text',
+                    text: options.notification || '🤖',
+                },
+            })
+        }
+
+        if (this.smartsuppClient) {
+            handoff()
+        } else {
+            this.smartsuppInit(options, () => handoff())
+        }   
     }
 
     componentWillUnmount() {
