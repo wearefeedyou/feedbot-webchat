@@ -10,7 +10,7 @@
     <!--  • all domains where code will be used need to be allowed by Feedyou -->
     <!--  • it is needed to append #feedbot-test-mode to the URL to show chatbot window during development -->
     <link
-      href="https://cdn.feedyou.ai/webchat/latest/botchat.css"
+      href="../../botchat.css"
       rel="stylesheet"
     />
     <div
@@ -30,6 +30,7 @@
           BotChat.App({
             bot: { id: "feedbot-demo-webchat" },
             theme: { template: { type: "sidebar" } },
+            disableInputWhenNotNeeded: true
           });
         };
         s.parentNode.insertBefore(t, s);

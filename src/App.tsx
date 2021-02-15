@@ -342,7 +342,7 @@ const FullScreenTheme = (theme: Theme) => `
   }
 
   .wc-console .wc-mic, .wc-console .wc-send {
-    top: 10px;
+    top: 10px !important;
   }
 
   .wc-console input[type=text], .wc-console textarea {
@@ -422,6 +422,25 @@ const ExpandableKnobTheme = (theme: Theme) => `
     border-top-right-radius: 15px;
   }
 
+  body .feedbot-wrapper .wc-chatview-panel {
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
+  .wc-app .wc-console {
+    background-color: white;
+    border-width: 0px;
+    border-top: 1px solid #dbdee1;
+  } 
+
+  .wc-app .wc-console .wc-textbox {
+    left: 20px;
+  } 
+
+  .wc-app .wc-console .wc-send {
+    top: 4px;
+  }
+
   body .feedbot-wrapper.collapsed {
     border-radius: 40px;
     width: 75px;
@@ -479,6 +498,14 @@ const Sidebar = (theme: Theme) => `
     right: 0;
     border-radius: 0;
   }
+
+  body .feedbot-wrapper .wc-chatview-panel  {
+    border-radius: 0;
+  }
+
+  body .wc-app .wc-console {
+    /* TODO what about transparent background? */
+  } 
 
   body .feedbot-wrapper.collapsed {
     bottom: 30px;
@@ -724,9 +751,13 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .feedbot-wrapper .wc-app .wc-card {
-        background-color: #fff !important;
+        background-color: transparent;
         border-width: 0px;
         border-radius: 5px;
+    }
+
+    .feedbot-wrapper .wc-app .wc-carousel .wc-card {
+        background-color: #fff !important;
     }
   
     .feedbot-wrapper .wc-message-content {
@@ -781,7 +812,7 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .feedbot-wrapper .wc-carousel {
-        margin-top: 10px;
+        margin-top: 10px !important;
     }
 
     ${theme.customCss || ""}
