@@ -242,7 +242,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         if (this.props.directLine) {
             botConnection = this.botConnection = new DirectLine(this.props.directLine)
         } else {
-            botConnection = this.props.botConnection
+            botConnection = this.botConnection = this.props.botConnection
         }
 
         botConnection.postActivityOriginal = botConnection.postActivity
