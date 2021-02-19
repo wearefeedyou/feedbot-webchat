@@ -458,7 +458,9 @@ export class Chat extends React.Component<ChatProps, {}> {
 
     smartsuppHandoff(options: SmartsuppHandoffOptions) {
         const handoff = () => {
-            console.log('Smartsupp handoff', options)
+            console.log('Smartsupp handoff, enabling input', options)
+            this.store.dispatch<ChatActions>({ type: 'Toggle_Disable_Input', disableInput: false });
+
             this.smartsuppActive = true
             this.smartsuppClient.chatMessage({
                 content: {
