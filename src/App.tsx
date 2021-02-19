@@ -482,7 +482,7 @@ const Sidebar = (theme: Theme) => `
     width: 50px;
     position: absolute;
     left: -60px;
-    top: 15px;
+    top: 10px;
     background-image: url('./times-solid.svg');
     background-size: 20px;
     background-position: center center;
@@ -528,17 +528,18 @@ const Sidebar = (theme: Theme) => `
 
   .wc-message-content {
     padding: 12px 14px;
+    line-height: 1.25em;
   }
 
   .wc-message-from-bot .wc-message-content {
     border-radius: 0 16px 16px 16px;
-    padding: 16px;
+    padding: 14px;
     background: linear-gradient(-45deg, rgba(245,245,245,0.5), rgba(245,245,245,0.9)) !important;
   }
 
   .wc-message-from-me .wc-message-content {
     border-radius: 16px 0 16px 16px;
-    padding: 16px;
+    padding: 14px;
   }
   
 
