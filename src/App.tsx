@@ -481,7 +481,7 @@ const Sidebar = (theme: Theme) => `
     height: 50px;
     width: 50px;
     position: absolute;
-    right: 15px;
+    left: -60px;
     top: 15px;
     background-image: url('./times-solid.svg');
     background-size: 20px;
@@ -532,15 +532,23 @@ const Sidebar = (theme: Theme) => `
 
   .wc-message-from-bot .wc-message-content {
     border-radius: 0 16px 16px 16px;
+    padding: 16px;
+    background: linear-gradient(-45deg, rgba(245,245,245,0.5), rgba(245,245,245,0.9)) !important;
   }
 
   .wc-message-from-me .wc-message-content {
     border-radius: 16px 0 16px 16px;
+    padding: 16px;
   }
+  
 
   .format-markdown + div {
     margin-top: 0 !important;
   }
+
+  .wc-app .wc-chatview-panel {
+    top: 0;
+}
   
 `;
 
