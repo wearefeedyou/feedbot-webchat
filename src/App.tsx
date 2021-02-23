@@ -411,6 +411,14 @@ const FullScreenTheme = (theme: Theme) => `
 `;
 
 const ExpandableKnobTheme = (theme: Theme) => `
+  .feedbot-reset {
+    all: revert
+  }
+
+  .feedbot-reset * {
+    all: revert
+  }
+
   body .feedbot-wrapper {
     bottom: calc(10px + 1vw);
     right: calc(10px + 1vw);
@@ -568,6 +576,14 @@ const Sidebar = (theme: Theme) => `
 `;
 
 const ExpandableBarTheme = (theme: Theme) => `
+  .feedbot-reset {
+    all: revert
+  }
+
+  .feedbot-reset * {
+    all: revert
+  }
+
   .feedbot-header {
       z-index: 10;
       color: white;

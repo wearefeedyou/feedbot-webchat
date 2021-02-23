@@ -8,6 +8,9 @@ export function renderExpandableTemplate(props: AppProps) {
   let container = document.createElement("div");
   container.className = "feedbot";
 
+  const reset = document.createElement("div");
+  reset.classList.add("feedbot-reset")
+
   const wrapper = document.createElement("div");
   wrapper.className = "feedbot-wrapper collapsed";
 
@@ -36,7 +39,9 @@ export function renderExpandableTemplate(props: AppProps) {
   wrapper.appendChild(header);
 
   wrapper.appendChild(container);
-  document.body.appendChild(wrapper);
+  
+  reset.appendChild(wrapper)
+  document.body.appendChild(reset);
 
   if (
     props.autoExpandTimeout &&
