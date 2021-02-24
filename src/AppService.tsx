@@ -11,6 +11,10 @@ export function renderExpandableTemplate(props: AppProps) {
   const wrapper = document.createElement("div");
   wrapper.className = "feedbot-wrapper collapsed";
 
+  const signature = document.createElement("div");
+  signature.classList.add("feedbot-signature");
+  signature.innerText = "🤖with ❤️by feedyou";
+
   const header = document.createElement("div");
   header.className = "feedbot-header";
   header.style.backgroundColor =
@@ -33,9 +37,10 @@ export function renderExpandableTemplate(props: AppProps) {
     localStorage &&
       (localStorage.feedbotClosed = wrapper.classList.contains("collapsed"));
   };
-  wrapper.appendChild(header);
 
+  wrapper.appendChild(header);
   wrapper.appendChild(container);
+
   document.body.appendChild(wrapper);
 
   if (

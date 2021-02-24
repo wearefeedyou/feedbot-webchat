@@ -471,6 +471,14 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 565px;
   }
 
+  .feedbot-signature {
+    position: absolute;
+    bottom: -22px;
+    font-size: 14px;
+    right: 20px;
+    opacity: 0.80;
+}
+
   ${ExpandableBarTheme(theme)}
 `;
 
