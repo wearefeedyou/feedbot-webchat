@@ -477,28 +477,28 @@ const ExpandableKnobTheme = (theme: Theme) => `
 
   .feedbot-signature {
     position: absolute;
-    bottom: -24px;
-    font-size: 14px;
-    right: 20px;
+    bottom: -22px;
+    font-size: 13px;
+    right: 11px;
     opacity: 0.80;
     font-family: "Roboto", sans-serif;
     display: flex;
     align-items: center;
 }
 
-  .feedbot-signature a {
-    transition: 0.3s;
-    color: black;
-    text-decoration: none;
-    height: 20px;
-    margin-left: 3px
-  }
+.feedbot-signature a {
+  transition: 0.3s;
+  color: black;
+  text-decoration: none;
+  height: 19px;
+  margin-left: 3px;
+}
 
   .feedbot-signature a:hover {
     cursor: pointer;
   }
   .feedbot-signature a img {
-    height: 23px
+    height: 20px
   }
 
   ${ExpandableBarTheme(theme)}
