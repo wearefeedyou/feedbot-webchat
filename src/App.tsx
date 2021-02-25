@@ -471,13 +471,35 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 565px;
   }
 
+  .feedbot-wrapper.collapsed .feedbot-signature {
+    display: none;
+  }
+
   .feedbot-signature {
     position: absolute;
-    bottom: -22px;
+    bottom: -24px;
     font-size: 14px;
     right: 20px;
     opacity: 0.80;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    align-items: center;
 }
+
+  .feedbot-signature a {
+    transition: 0.3s;
+    color: black;
+    text-decoration: none;
+    height: 20px;
+    margin-left: 3px
+  }
+
+  .feedbot-signature a:hover {
+    cursor: pointer;
+  }
+  .feedbot-signature a img {
+    height: 23px
+  }
 
   ${ExpandableBarTheme(theme)}
 `;
@@ -585,6 +607,7 @@ const ExpandableBarTheme = (theme: Theme) => `
       font-size: 1.1em;
       letter-spacing: 1px;
       display: flex;
+      font-family: 'Roboto', sans-serif;
   }
 
   .feedbot-header .feedbot-title {
