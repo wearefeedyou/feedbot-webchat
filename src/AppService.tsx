@@ -40,7 +40,7 @@ export function renderExpandableTemplate(props: AppProps) {
 
   wrapper.appendChild(header);
   wrapper.appendChild(container);
-  wrapper.appendChild(signature);
+  props.showSignature && wrapper.appendChild(signature);
   
 
   document.body.appendChild(wrapper);

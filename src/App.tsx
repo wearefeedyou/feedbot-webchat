@@ -19,6 +19,7 @@ export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
   autoExpandTimeout?: number;
+  showSignature?: boolean
 };
 
 export const App = async (props: AppProps, container?: HTMLElement) => {
@@ -475,24 +476,33 @@ const ExpandableKnobTheme = (theme: Theme) => `
     display: none;
   }
 
-  .feedbot-signature {
+  .feedbot-wrapper .feedbot-signature {
     position: absolute;
     bottom: -22px;
     font-size: 13px;
     right: 11px;
-    opacity: 0.80;
+    opacity: 0.50;
     font-family: "Roboto", sans-serif;
     display: flex;
     align-items: center;
-}
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -moz-transition: opacity 0.3s ease-in-out;
+    -ms-transition: opacity 0.3s ease-in-out;
+    -o-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+  }
 
-.feedbot-signature a {
-  transition: 0.3s;
-  color: black;
-  text-decoration: none;
-  height: 19px;
-  margin-left: 3px;
-}
+  .feedbot-wrapper .feedbot-signature:hover {
+    opacity: 0.80;
+  }
+
+  .feedbot-signature a {
+    transition: 0.3s;
+    color: black;
+    text-decoration: none;
+    height: 19px;
+    margin-left: 3px;
+  }
 
   .feedbot-signature a:hover {
     cursor: pointer;
@@ -585,7 +595,6 @@ const Sidebar = (theme: Theme) => `
     border-radius: 16px 0 16px 16px;
     padding: 14px;
   }
-  
 
   .format-markdown + div {
     margin-top: 0 !important;
@@ -871,6 +880,10 @@ const BaseTheme = (theme: Theme) => `
 
     .feedbot-wrapper .wc-carousel {
         margin-top: 10px !important;
+    }
+
+    .feedbot-signature {
+      display: none;
     }
 
     ${theme.customCss || ""}
