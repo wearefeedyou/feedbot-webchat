@@ -18,7 +18,9 @@ export type Theme = {
 export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
+  channel?: {index?: number, id?: string},
   autoExpandTimeout?: number;
+  showSignature?: boolean
 };
 
 export const App = async (props: AppProps, container?: HTMLElement) => {
@@ -51,6 +53,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
           },
           body: JSON.stringify({
             user: props.user,
+            channel: props.channel
           }),
         }
       );
@@ -62,8 +65,12 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         token: body.token,
       });
       delete props.directLine;
-
-      if (body.testMode && window.location.hash !== "#feedbot-test-mode") {
+      
+      // TODO configurable template system based on config
+      const config = body.config;
+      const alwaysVisible = config.visibility === 'always'
+      const neverVisible = config.visibility === 'never'
+      if (neverVisible || (!alwaysVisible && body.testMode && window.location.hash !== "#feedbot-test-mode")) {
         document
           .getElementsByTagName("body")[0]
           .classList.add("feedbot-disabled");
@@ -74,8 +81,6 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
           .classList.add("feedbot-enabled");
       }
 
-      // TODO configurable template system based on config
-      const config = body.config;
       if (config && config.template) {
         props.theme = {
           ...props.theme,
@@ -471,6 +476,7 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 565px;
   }
 
+
   .wc-upload-screenshot {
     position: absolute !important;
     left: 46px !important;
@@ -486,6 +492,45 @@ const ExpandableKnobTheme = (theme: Theme) => `
   height: 22px;
 }
 
+  .feedbot-wrapper.collapsed .feedbot-signature {
+    display: none;
+  }
+
+  .feedbot-wrapper .feedbot-signature {
+    position: absolute;
+    bottom: -22px;
+    font-size: 13px;
+    right: 11px;
+    opacity: 0.50;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    align-items: center;
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -moz-transition: opacity 0.3s ease-in-out;
+    -ms-transition: opacity 0.3s ease-in-out;
+    -o-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .feedbot-wrapper .feedbot-signature:hover {
+    opacity: 0.80;
+  }
+
+  .feedbot-signature a {
+    transition: 0.3s;
+    color: black;
+    text-decoration: none;
+    height: 19px;
+    margin-left: 3px;
+  }
+
+  .feedbot-signature a:hover {
+    cursor: pointer;
+  }
+  .feedbot-signature a img {
+    height: 20px
+  }
+
   ${ExpandableBarTheme(theme)}
 `;
 
@@ -493,11 +538,11 @@ const Sidebar = (theme: Theme) => `
   ${ExpandableKnobTheme(theme)}
 
   body .feedbot-wrapper:not(.collapsed) .feedbot-header {
-    height: 50px;
-    width: 50px;
+    height: 35px;
+    width: 35px;
     position: absolute;
-    left: -60px;
-    top: 10px;
+    right: 10px;
+    top: 20px;
 
     border-radius: 40px;
     padding: 0px;
@@ -508,7 +553,7 @@ const Sidebar = (theme: Theme) => `
 
     background-image: url('https://feedyou.blob.core.windows.net/webchat/times-solid.svg');
     background-repeat: no-repeat;
-    background-size: 20px;
+    background-size: 15px;
     background-position: center center;    
 
     /*backdrop-filter: blur(40px);
@@ -532,8 +577,11 @@ const Sidebar = (theme: Theme) => `
   }
 
   body .wc-app .wc-console {
-    /* TODO what about transparent background? */
+    border-radius: 16px;
+    margin: 0 12px 10px;
+    border: 1px solid #dbdee1;
   } 
+
 
   body .feedbot-wrapper.collapsed {
     bottom: 30px;
@@ -570,7 +618,6 @@ const Sidebar = (theme: Theme) => `
     border-radius: 16px 0 16px 16px;
     padding: 14px;
   }
-  
 
   .format-markdown + div {
     margin-top: 0 !important;
@@ -592,6 +639,7 @@ const ExpandableBarTheme = (theme: Theme) => `
       font-size: 1.1em;
       letter-spacing: 1px;
       display: flex;
+      font-family: 'Roboto', sans-serif;
   }
 
   .feedbot-header .feedbot-title {
@@ -632,7 +680,7 @@ const ExpandableBarTheme = (theme: Theme) => `
     position: fixed;
     right: 5%;
     bottom: 0px;
-    z-index: 10000;
+    z-index: 100000;
 
     -webkit-box-shadow: 0px 0px 10px 0px rgba(167, 167, 167, 0.35);
     -moz-box-shadow: 0px 0px 10px 0px rgba(167, 167, 167, 0.35);
@@ -778,8 +826,9 @@ const BaseTheme = (theme: Theme) => `
         border-color: ${theme.mainColor} !important;
 
         flex: auto;
-        text-overflow: initial;
-        white-space: initial;
+        text-overflow: initial !important;
+        white-space: initial !important;
+        padding: 5px 16px;
     }
 
     .feedbot-wrapper .wc-app .wc-card button:active {
@@ -859,6 +908,10 @@ const BaseTheme = (theme: Theme) => `
 
     .wc-console.has-upload-button .wc-textbox {
       left: 96px !important;
+
+    .feedbot-signature {
+      display: none;
+
     }
 
     ${theme.customCss || ""}
