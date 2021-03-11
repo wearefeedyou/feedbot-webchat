@@ -842,5 +842,36 @@ const BaseTheme = (theme: Theme) => `
         margin-top: 10px !important;
     }
 
+    .wc-list.tiles .ac-actionSet {
+      flex-direction: row !important;
+      flex-wrap: wrap;
+    }
+
+    .wc-list.tiles .ac-pushButton {
+      flex-basis: 44% !important;
+      height: 120px !important;
+      margin: 3% !important;
+      flex-direction: column !important;
+      transition: 0.3s;
+      position: relative;
+      top: 0;
+    }
+
+    .wc-list.tiles .ac-pushButton:hover {
+      top: -3px;
+      filter: brightness(90%);
+    }
+
+    .wc-list.tiles .ac-pushButton img {
+      width: 42px !important;
+      height: 42px !important;
+    }
+
+    .wc-list.tiles .ac-pushButton div {
+      overflow: unset !important; 
+      text-overflow: unset !important; 
+      white-space: unset !important;
+    }
+
     ${theme.customCss || ""}
   `;
