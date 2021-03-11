@@ -38,7 +38,6 @@ export const sendFiles = (files: FileList, from: User, locale: string) => ({
     }} as ChatActions);
 
 export const sendScreenshot = (screen: string, from: User, locale: string) => {
-  console.log("hello ze store");
   return {
     type: "Send_Message",
     activity: {
