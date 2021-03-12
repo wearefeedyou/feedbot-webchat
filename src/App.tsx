@@ -927,11 +927,12 @@ const BaseTheme = (theme: Theme) => `
 
     .wc-list.tiles .ac-pushButton {
       flex-basis: 44% !important;
-      height: 120px !important;
+      min-height: 120px !important;
       margin: 3% !important;
       flex-direction: column !important;
       transition: 0.3s;
       position: relative;
+      padding: 16px;
       top: 0;
     }
 
