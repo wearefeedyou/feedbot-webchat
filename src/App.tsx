@@ -952,10 +952,10 @@ const BaseTheme = (theme: Theme) => `
       overflow: unset !important; 
       text-overflow: unset !important; 
       white-space: unset !important;
+    }
 
     .feedbot-signature {
       display: none;
-
     }
 
     ${theme.customCss || ""}
