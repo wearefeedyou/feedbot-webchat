@@ -920,6 +920,11 @@ const BaseTheme = (theme: Theme) => `
       flex-wrap: wrap;
     }
 
+    .wc-list.tiles .ac-container {
+      padding-top: 0px;
+      margin-top: -5px;
+    }
+
     .wc-list.tiles .ac-pushButton {
       flex-basis: 44% !important;
       height: 120px !important;
@@ -936,8 +941,10 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .wc-list.tiles .ac-pushButton img {
-      width: 42px !important;
-      height: 42px !important;
+      width: 36px !important;
+      height: 36px !important;
+      margin-right: 0px !important;
+      margin-bottom: 10px !important;
     }
 
     .wc-list.tiles .ac-pushButton div {
