@@ -536,7 +536,7 @@ const ExpandableKnobTheme = (theme: Theme) => `
     cursor: pointer;
   }
   .feedbot-signature a img {
-    height: 20px
+    height: 20px;
     position: relative;
     top: -1px;
   }
