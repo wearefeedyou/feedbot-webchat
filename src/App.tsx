@@ -13,6 +13,7 @@ export type Theme = {
   mainColor: string;
   template: any;
   customCss?: string;
+  showSignature?: boolean
 };
 
 export type AppProps = ChatProps & {
@@ -20,7 +21,6 @@ export type AppProps = ChatProps & {
   header?: { textWhenCollapsed?: string; text: string };
   channel?: {index?: number, id?: string},
   autoExpandTimeout?: number;
-  showSignature?: boolean
 };
 
 export const App = async (props: AppProps, container?: HTMLElement) => {
@@ -582,6 +582,12 @@ const Sidebar = (theme: Theme) => `
 
   body .feedbot-wrapper .wc-chatview-panel  {
     border-radius: 0;
+    ${theme.showSignature ? 'bottom: 14px;' : ''}
+    top: 0;
+  }
+
+  .feedbot-wrapper .wc-suggested-actions {
+    ${theme.showSignature ? 'bottom: 68px;' : ''}
   }
 
   body .wc-app .wc-console {
@@ -631,9 +637,11 @@ const Sidebar = (theme: Theme) => `
     margin-top: 0 !important;
   }
 
-  .wc-app .wc-chatview-panel {
-    top: 0;
-}
+  .feedbot-wrapper .feedbot-signature {
+    bottom: 1px;
+    left: 0px;
+    justify-content: center;
+  }
   
 `;
 
