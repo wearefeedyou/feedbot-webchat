@@ -537,6 +537,8 @@ const ExpandableKnobTheme = (theme: Theme) => `
   }
   .feedbot-signature a img {
     height: 20px
+    position: relative;
+    top: -1px;
   }
 
   ${ExpandableBarTheme(theme)}
