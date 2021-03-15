@@ -890,41 +890,6 @@ const BaseTheme = (theme: Theme) => `
       max-width: 100%;
     }
 
-    @media (max-width: 450px) {
-      .feedbot-wrapper .wc-card {
-        border: 1px solid #d2dde5;
-        width: 198px; }
-      .feedbot-wrapper .wc-adaptive-card {
-        width: 214px; } }
-
-    .wc-message-from.wc-message-from-bot {
-        visibility: hidden;
-        height: 2px;
-    }
-
-    .wc-message-wrapper:not([data-activity-id='retry']) .wc-message-from {
-        visibility: hidden;
-        height: 2px;
-    }
-
-    .wc-message-wrapper:not([data-activity-id]) .wc-message-from {
-        visibility: visible;
-    }
-
-    .feedbot-wrapper .wc-message-content {
-        padding: 10px;
-        border-radius: 10px;
-    }
-
-    .feedbot-wrapper .wc-message-from-bot .wc-message-content {
-        color: #424242 !important;
-    }
-
-    .feedbot-wrapper .wc-carousel {
-        margin-top: 10px !important;
-    }
-
-
     .wc-list.tiles .ac-actionSet {
       flex-direction: row !important;
       flex-wrap: wrap;
@@ -951,6 +916,11 @@ const BaseTheme = (theme: Theme) => `
       filter: brightness(90%);
     }
 
+    .feedbot-wrapper .wc-app .wc-list.tiles .wc-card .ac-pushButton:active {
+      background-color: ${theme.mainColor}A0 !important;
+      color: white !important;
+    }
+
     .wc-list.tiles .ac-pushButton img {
       width: 36px !important;
       height: 36px !important;
@@ -962,6 +932,57 @@ const BaseTheme = (theme: Theme) => `
       overflow: unset !important; 
       text-overflow: unset !important; 
       white-space: unset !important;
+    }
+
+    @media (max-width: 450px) {
+      .feedbot-wrapper .wc-card {
+        border: 1px solid #d2dde5;
+        width: 198px; 
+      }
+      .feedbot-wrapper .wc-list.tiles .wc-card {
+        border: none;
+        width: 100%; 
+      }
+
+      .wc-list.tiles .ac-pushButton {
+        min-height: 95px !important;
+      }
+
+      .wc-list.tiles .ac-container {
+        padding: 0 !important;
+        margin-top: 0 !important;
+      }
+
+      .feedbot-wrapper .wc-adaptive-card {
+        width: 214px; 
+      } 
+    }
+
+    .wc-message-from.wc-message-from-bot {
+        visibility: hidden;
+        height: 2px;
+    }
+
+    .wc-message-wrapper:not([data-activity-id='retry']) .wc-message-from {
+        visibility: hidden;
+        height: 2px;
+    }
+
+    .wc-message-wrapper:not([data-activity-id]) .wc-message-from {
+        visibility: visible;
+    }
+
+    .feedbot-wrapper .wc-message-content {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .feedbot-wrapper .wc-message-from-bot .wc-message-content {
+        color: #424242 !important;
+    }
+
+    .feedbot-wrapper .wc-carousel {
+        margin-top: 10px !important;
     }
 
     .feedbot-signature {
