@@ -885,6 +885,10 @@ const BaseTheme = (theme: Theme) => `
       border: 1px solid #d2dde5;
       max-width: 100%;
     }
+
+    .wc-list .ac-container {
+      outline: none !important;
+    }
     
     .feedbot-wrapper .wc-adaptive-card {
       max-width: 100%;
@@ -893,6 +897,7 @@ const BaseTheme = (theme: Theme) => `
     .wc-list.tiles .ac-actionSet {
       flex-direction: row !important;
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     .wc-list.tiles .ac-container {
