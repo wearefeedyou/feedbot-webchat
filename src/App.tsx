@@ -586,7 +586,7 @@ const Sidebar = (theme: Theme) => `
 
   body .wc-app .wc-console {
     border-radius: 16px;
-    margin: 0 12px 10px;
+    margin: 0 12px 16px;
     border: 1px solid #dbdee1;
   } 
 
@@ -633,6 +633,21 @@ const Sidebar = (theme: Theme) => `
 
   .wc-app .wc-chatview-panel {
     top: 0;
+}
+
+.feedbot-wrapper .feedbot-signature {
+  position: absolute;
+  bottom: 0px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.feedbot-signature a {
+  height: 14px;
+}
+
+.feedbot-signature a img {
+  height: 16px
 }
   
 `;
