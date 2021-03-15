@@ -598,7 +598,7 @@ const Sidebar = (theme: Theme) => `
 
   .feedbot-wrapper {
     max-height: 100%;
-    background: linear-gradient(45deg, rgba(256,256,256, 0.2), rgba(256,256,256, 0.8));
+    background: linear-gradient(45deg, ${theme.mainColor}33, rgba(256,256,256, 0.8));
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
   }
