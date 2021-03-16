@@ -914,6 +914,27 @@ const BaseTheme = (theme: Theme) => `
         margin-top: 10px !important;
     }
 
+    .wc-carousel .wc-hscroll ul {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li > .wc-card {
+      height: 100%;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li > .wc-card > div {
+      height: 100%;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container {
+      height: 100%;
+    }
+    
+    .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container{
+      height: calc(100% - 40px);
+    }
+
     .feedbot-signature {
       display: none;
     }
