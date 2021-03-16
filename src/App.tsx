@@ -564,9 +564,6 @@ const Sidebar = (theme: Theme) => `
     background-size: 15px;
     background-position: center center;    
 
-    /*backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    background-color: rgba(256,256,256, 0.5) !important;*/
   }
 
   .feedbot-wrapper.collapsed .feedbot-header {
@@ -596,11 +593,20 @@ const Sidebar = (theme: Theme) => `
     right: 30px;
   }
 
+  /* slightly transparent fallback */
   .feedbot-wrapper {
     max-height: 100%;
-    background: linear-gradient(45deg, ${theme.mainColor}33, rgba(256,256,256, 0.8));
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: rgb(255, 255, 255);
+  }
+
+  /* if backdrop support: very transparent and blurred */
+  @supports ((-webkit-backdrop-filter: blur(40px)) or (backdrop-filter: blur(40px))) {
+    .feedbot-wrapper {
+      max-height: 100%;
+      background: linear-gradient(45deg, ${theme.mainColor}33, rgba(256,256,256, 0.8));
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
   }
 
   .wc-app .wc-message-groups {
