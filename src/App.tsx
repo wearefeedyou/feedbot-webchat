@@ -928,11 +928,24 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container {
+      padding: 0 !important;
       height: 100%;
     }
     
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container{
-      height: calc(100% - 40px);
+      height: calc(100% - 48px);
+    }
+
+    .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-image{
+      border-radius: 5px 5px 0 0;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-textBlock{
+      padding: 0 8px;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li > .wc-card > div .ac-actionSet{
+      margin: 0 8px !important;
     }
 
     .feedbot-signature {
