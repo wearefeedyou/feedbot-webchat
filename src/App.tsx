@@ -919,8 +919,14 @@ const BaseTheme = (theme: Theme) => `
       align-items: stretch;
     }
 
+    .wc-carousel .wc-hscroll > ul > li {
+      min-width: calc(100% - 4px) !important;
+    }
+
     .wc-carousel .wc-hscroll > ul > li > .wc-card {
       height: 100%;
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div {
@@ -933,7 +939,7 @@ const BaseTheme = (theme: Theme) => `
     }
     
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container{
-      height: calc(100% - 48px);
+      height: calc(100% - 52px);
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-image{
@@ -941,11 +947,11 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-textBlock{
-      padding: 0 8px;
+      padding: 0 20px;
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div .ac-actionSet{
-      margin: 0 8px !important;
+      margin: 8px 20px 12px !important;
     }
 
     .feedbot-signature {
