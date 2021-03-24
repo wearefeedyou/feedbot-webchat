@@ -643,6 +643,11 @@ const Sidebar = (theme: Theme) => `
     bottom: 1px;
     left: 0px;
     justify-content: center;
+    text-shadow: 1px 1px 7px rgb(255 255 255 / 50%);
+  }
+
+  .feedbot-signature a img {
+    height: 22px;
   }
   
 `;
