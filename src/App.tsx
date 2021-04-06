@@ -94,9 +94,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
           props.theme.mainColor = config.mainColor;
         }
 
-        if(config.hideSignature) {
-          props.theme.showSignature = !config.hideSignature
-        }
+        props.theme.showSignature = !config.hideSignature
 
         if (config.showInput === "auto") {
           props.disableInputWhenNotNeeded = true;
