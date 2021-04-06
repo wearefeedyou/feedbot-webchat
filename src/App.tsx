@@ -8,7 +8,7 @@ import {
 } from "./AppService";
 import { DirectLine } from "botframework-directlinejs";
 import * as konsole from "./Konsole";
-const rgbHex = require('rgb-hex');
+import * as rgb2hex from "rgb2hex"
 
 export type Theme = {
   mainColor: string;
@@ -208,7 +208,7 @@ function getStyleForTheme(theme: Theme, remoteConfig: boolean): string {
 
 function convertRGBtoHex (color: string) {
   if(color.startsWith("rgb")){
-    return rgbHex(color)
+    return rgb2hex(color).hex
   }
   return color
 }
