@@ -49,6 +49,7 @@
     "react-redux": "5.0.5",
     "redux": "3.7.2",
     "redux-observable": "0.13.0",
+    "rgb-hex": "^3.0.0",
     "rxjs": "5.4.3",
     "simple-update-in": "^1.2.0",
     "smartsupp-websocket": "^1.1.0",

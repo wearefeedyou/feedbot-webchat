@@ -8,6 +8,7 @@ import {
 } from "./AppService";
 import { DirectLine } from "botframework-directlinejs";
 import * as konsole from "./Konsole";
+const rgbHex = require('rgb-hex');
 
 export type Theme = {
   mainColor: string;
@@ -203,6 +204,13 @@ function getStyleForTheme(theme: Theme, remoteConfig: boolean): string {
 
   // backward compatibility - knob is new default for remote config, old default is bar
   return remoteConfig ? ExpandableKnobTheme(theme) : ExpandableBarTheme(theme);
+}
+
+function convertRGBtoHex (color: string) {
+  if(color.startsWith("rgb")){
+    return rgbHex(color)
+  }
+  return color
 }
 
 const FullScreenTheme = (theme: Theme) => `
@@ -603,7 +611,7 @@ const Sidebar = (theme: Theme) => `
   @supports ((-webkit-backdrop-filter: blur(40px)) or (backdrop-filter: blur(40px))) {
     .feedbot-wrapper {
       max-height: 100%;
-      background: linear-gradient(45deg, ${theme.mainColor}33,  #FFFFFFCE);
+      background: linear-gradient(45deg, #${convertRGBtoHex(theme.mainColor)}33,  #FFFFFFCE);
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
     }
