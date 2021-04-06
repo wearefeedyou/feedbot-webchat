@@ -57,9 +57,14 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
             referrer: window.location.href
           }),
         }
-      );
+      )
       const body = await response.json();
       console.log("Token response", body);
+
+
+      //FEEDYOU - Loader
+      document.querySelector("body").classList.add("loaded")
+      
 
       props.botConnection = new DirectLine({
         ...(props.directLine || {}),
