@@ -60,10 +60,6 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       )
       const body = await response.json();
       console.log("Token response", body);
-
-
-      //FEEDYOU - Loader
-      document.querySelector("body").classList.add("loaded")
       
 
       props.botConnection = new DirectLine({
