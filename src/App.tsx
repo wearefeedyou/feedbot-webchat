@@ -667,6 +667,11 @@ const Sidebar = (theme: Theme) => `
     justify-content: center;
     text-shadow: 1px 1px 7px rgb(255 255 255 / 50%);
   }
+  
+  .feedbot-signature a {
+    height: unset;
+    display: flex;
+  }
 
   .feedbot-signature a img {
     height: 22px;
