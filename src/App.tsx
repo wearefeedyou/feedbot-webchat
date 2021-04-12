@@ -641,6 +641,10 @@ const Sidebar = (theme: Theme) => `
     display: none;
   }
 
+  .feedbot-wrapper .wc-adaptive-card, .feedbot-wrapper .wc-card {
+    max-width: 300px !important;
+  }
+
   .wc-message-content {
     padding: 12px 14px;
     line-height: 1.25em;
@@ -755,6 +759,14 @@ const ExpandableBarTheme = (theme: Theme) => `
   }
 
   ${BaseTheme(theme)}
+
+  .wc-carousel .wc-hscroll > ul > li > .wc-card {
+    height: 100%;
+  }
+
+  .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-image{
+    border-radius: 5px 5px 0 0;
+  }
 `;
 
 const BaseTheme = (theme: Theme) => `
@@ -877,9 +889,12 @@ const BaseTheme = (theme: Theme) => `
         border-color: ${theme.mainColor} !important;
 
         flex: auto;
+        padding: 5px 16px;
+    }
+
+    .feedbot-wrapper .wc-app .wc-card button, .feedbot-wrapper .wc-app .wc-card button > div {
         text-overflow: initial !important;
         white-space: initial !important;
-        padding: 5px 16px;
     }
 
     .feedbot-wrapper .wc-app .wc-card button:active {
@@ -1027,15 +1042,9 @@ const BaseTheme = (theme: Theme) => `
       display: flex;
       align-items: stretch;
     }
-
-    .wc-carousel .wc-hscroll > ul > li {
-      min-width: calc(100% - 4px) !important;
-    }
-
+  
     .wc-carousel .wc-hscroll > ul > li > .wc-card {
-      height: 100%;
-      width: 100% !important;
-      max-width: 100% !important;
+      width: 398px !important;
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div {
@@ -1052,7 +1061,7 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-image{
-      border-radius: 5px 5px 0 0;
+      border-radius: 8px 8px 0 0;
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div > .ac-container > .ac-container .ac-textBlock{
@@ -1060,7 +1069,7 @@ const BaseTheme = (theme: Theme) => `
     }
 
     .wc-carousel .wc-hscroll > ul > li > .wc-card > div .ac-actionSet{
-      margin: 8px 20px 12px !important;
+      margin: 4px 20px 12px !important;
     }
 
     .feedbot-signature {
