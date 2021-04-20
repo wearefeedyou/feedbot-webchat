@@ -20,7 +20,7 @@ export type Theme = {
 export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
-  channel?: {index?: number, id?: string},
+  channel?: { index?: number, id?: string },
   autoExpandTimeout?: number;
 };
 
@@ -67,7 +67,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         token: body.token,
       });
       delete props.directLine;
-      
+
       // TODO configurable template system based on config
       const config = body.config;
       const alwaysVisible = config && config.visibility === 'always'
@@ -209,7 +209,7 @@ function getStyleForTheme(theme: Theme, remoteConfig: boolean): string {
   return remoteConfig ? ExpandableKnobTheme(theme) : ExpandableBarTheme(theme);
 }
 
-function getSidebarBackgroundColor (theme: Theme) {
+function getSidebarBackgroundColor(theme: Theme) {
   return '#FFFFFF'
 
   // TODO make background tint configurable in theme
@@ -218,6 +218,10 @@ function getSidebarBackgroundColor (theme: Theme) {
     return rgb2hex(color).hex
   }
   return color*/
+}
+
+export function isSafari() {
+  return !(navigator.userAgent.indexOf("Safari") !== -1 && navigator.userAgent.indexOf("Chrome") !== -1);
 }
 
 const FullScreenTheme = (theme: Theme) => `
@@ -477,11 +481,10 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 100%;
     padding: 0px;
 
-    background-image: url(${
-      (theme.template && theme.template.iconUrl)
-        ? theme.template.iconUrl
-        :"https://cdn.feedyou.ai/webchat/message-icon.png"
-    });
+    background-image: url(${(theme.template && theme.template.iconUrl)
+    ? theme.template.iconUrl
+    : "https://cdn.feedyou.ai/webchat/message-icon.png"
+  });
     background-size: 50px 50px;
     background-position: 12px 12px;
     background-repeat: no-repeat;
@@ -496,7 +499,7 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 565px;
   }
 
-  ${window.location.hash === '#feedbot-feature-screenshot' ? `
+  ${window.location.hash === '#feedbot-feature-screenshot' && !isSafari() ? `
     .wc-upload-screenshot {
       position: absolute !important;
       left: 46px !important;
