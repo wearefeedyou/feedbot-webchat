@@ -20,7 +20,7 @@ export type Theme = {
 export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
-  channel?: {index?: number, id?: string},
+  channel?: { index?: number, id?: string },
   autoExpandTimeout?: number;
 };
 
@@ -67,7 +67,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         token: body.token,
       });
       delete props.directLine;
-      
+
       // TODO configurable template system based on config
       const config = body.config;
       const alwaysVisible = config && config.visibility === 'always'
@@ -209,8 +209,8 @@ function getStyleForTheme(theme: Theme, remoteConfig: boolean): string {
   return remoteConfig ? ExpandableKnobTheme(theme) : ExpandableBarTheme(theme);
 }
 
-function getSidebarBackgroundColor (theme: Theme) {
-  return '#FFFFFF'
+function getSidebarBackgroundColor(theme: Theme) {
+  return '#e1e1e1'
 
   // TODO make background tint configurable in theme
   /*const color = theme.mainColor
@@ -477,11 +477,10 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 100%;
     padding: 0px;
 
-    background-image: url(${
-      (theme.template && theme.template.iconUrl)
-        ? theme.template.iconUrl
-        :"https://cdn.feedyou.ai/webchat/message-icon.png"
-    });
+    background-image: url(${(theme.template && theme.template.iconUrl)
+    ? theme.template.iconUrl
+    : "https://cdn.feedyou.ai/webchat/message-icon.png"
+  });
     background-size: 50px 50px;
     background-position: 12px 12px;
     background-repeat: no-repeat;
@@ -628,7 +627,7 @@ const Sidebar = (theme: Theme) => `
   @supports ((-webkit-backdrop-filter: blur(40px)) or (backdrop-filter: blur(40px))) {
     .feedbot-wrapper {
       max-height: 100%;
-      background: linear-gradient(45deg, ${getSidebarBackgroundColor(theme)}33,  #FFFFFFCE);
+      background: linear-gradient(45deg, ${getSidebarBackgroundColor(theme)}33,  #E1E1E1CE);
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
     }
@@ -654,7 +653,7 @@ const Sidebar = (theme: Theme) => `
   .wc-message-from-bot .wc-message-content {
     border-radius: 0 16px 16px 16px;
     padding: 14px;
-    background: linear-gradient(-45deg, rgba(245,245,245,0.5), rgba(245,245,245,0.9)) !important;
+    background: linear-gradient(-45deg, rgba(255,255,255,0.5), rgba(255,255,255,0.9)) !important;
   }
 
   .wc-message-from-me .wc-message-content {
