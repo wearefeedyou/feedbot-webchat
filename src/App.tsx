@@ -14,7 +14,8 @@ export type Theme = {
   mainColor: string;
   template: any;
   customCss?: string;
-  showSignature?: boolean
+  showSignature?: boolean,
+  enableScreenshotUpload?: boolean
 };
 
 export type AppProps = ChatProps & {
@@ -97,6 +98,8 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         }
 
         props.theme.showSignature = !config.hideSignature
+
+        props.theme.enableScreenshotUpload = !!config.enableScreenshotUpload
 
         if (config.showInput === "auto") {
           props.disableInputWhenNotNeeded = true;
@@ -499,8 +502,13 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 565px;
   }
 
-  ${window.location.hash === '#feedbot-feature-screenshot' && !isSafari() ? `
+  .wc-upload-screenshot {
+    display: none !important;
+  }
+
+  ${theme.enableScreenshotUpload && !isSafari() ? `
     .wc-upload-screenshot {
+      display: inline-block !important;
       position: absolute !important;
       left: 46px !important;
       height: 40px !important;
