@@ -29,11 +29,24 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
   konsole.log("BotChat.App props", props);
 
   // FEEDYOU generate user ID if not present in props, make sure its always string
+  
   props.user = {
     name: "Uživatel",
     ...props.user,
     id: props.user && props.user.id ? "" + props.user.id : MakeId(),
   };
+
+  // if(body.config?.persistentUser){
+  //   if(!sessionStorage.getItem("feedbot-user-id")){
+  //     sessionStorage.setItem("feedbot-user-id", MakeId())
+  //   }
+  //   props.user.id = sessionStorage.getItem("feedbot-user-id")
+  // }
+
+
+  // props.directLine.conversationId = sessionStorage["feedbot-conversation-id"]
+  // props.directLine.webSocket = false
+
 
   // FEEDYOU fetch DL token from bot when no token or secret found
   const remoteConfig =
@@ -63,8 +76,10 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       const body = await response.json();
       console.log("Token response", body);
 
+      const dl = props.directLine || {}
       props.botConnection = new DirectLine({
-        ...(props.directLine || {}),
+        ...dl,
+        conversationId: dl.conversationId || sessionStorage["feedbot-conversation-id"],
         token: body.token,
       });
       delete props.directLine;

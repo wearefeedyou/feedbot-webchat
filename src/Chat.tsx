@@ -379,6 +379,7 @@ export class Chat extends React.Component<ChatProps, {}> {
                 this.store.dispatch<ChatActions>({ type: 'Connection_Change', connectionStatus })
 
                 // FEEDYOU
+                sessionStorage.setItem("feedbot-conversation-id", botConnection.conversationId)
                 if (this.props.onConversationStarted && connectionStatus === ConnectionStatus.Online && botConnection.conversationId) {
                     this.props.onConversationStarted(botConnection.conversationId)
                 }
@@ -533,7 +534,7 @@ export class Chat extends React.Component<ChatProps, {}> {
 }
 
 export interface IDoCardAction {
-    (type: CardActionTypes, value: string | object): void;
+    (type: CardActionTypes | "changeUrl", value: string | object): void;
 }
 
 export const doCardAction = (
@@ -545,10 +546,12 @@ export const doCardAction = (
     type,
     actionValue
 ) => {
+    console.log("volám doCardAction")
 
     const text = (typeof actionValue === 'string') ? actionValue as string : undefined;
     const value = (typeof actionValue === 'object')? actionValue as object : undefined;
 
+    console.log("buttonType:",type)
     switch (type) {
         case "imBack":
             if (typeof text === 'string')
@@ -559,9 +562,12 @@ export const doCardAction = (
             sendPostBack(botConnection, text, value, from, locale);
             break;
 
+        case "playAudio":
+            console.log("PARTY OR DIE!")
+            window.location.href = text
+            break;
         case "call":
         case "openUrl":
-        case "playAudio":
         case "playVideo":
         case "showImage":
         case "downloadFile":

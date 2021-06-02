@@ -4,7 +4,7 @@ import { AdaptiveCard, CardElement, Column, ColumnSet, ColumnWidth, Container, I
 import { BotFrameworkCardAction } from './AdaptiveCardContainer';
 import { SizeAndUnit } from 'adaptivecards/lib/utils';
 import { Tile } from './Types';
-
+import {ChangeUrlAction} from "./ChangeUrlAction"
 
 export class AdaptiveCardBuilder {
     private container: Container;
@@ -83,6 +83,15 @@ export class AdaptiveCardBuilder {
 
             action.data = botFrameworkCardAction;
             action.title = cardAction.title;
+
+            return action;
+            
+        }else if(cardAction.type === "playAudio"){
+            const action = new ChangeUrlAction()
+            const botFrameworkCardAction: BotFrameworkCardAction = { __isBotFrameworkCardAction: true, ...cardAction };
+
+            action.title = cardAction.title;
+            action.url = cardAction.value;
 
             return action;
         } else {
