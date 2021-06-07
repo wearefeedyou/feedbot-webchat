@@ -36,17 +36,21 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
     id: props.user && props.user.id ? "" + props.user.id : MakeId(),
   };
 
-  // if(body.config?.persistentUser){
-  //   if(!sessionStorage.getItem("feedbot-user-id")){
-  //     sessionStorage.setItem("feedbot-user-id", MakeId())
-  //   }
-  //   props.user.id = sessionStorage.getItem("feedbot-user-id")
-  // }
+  //if(body.config?.persistent === "user" || body.config?.persistent === "conversation" ){
+    if(sessionStorage.getItem("feedbotUserId")){
+      console.log("hello")
+      props.user.id = sessionStorage.getItem("feedbotUserId")
+    } else {
+      props.user.id = MakeId()
+      sessionStorage.setItem("feedbotUserId", props.user.id)
+    }
+    
+  //}
 
-
-  // props.directLine.conversationId = sessionStorage["feedbot-conversation-id"]
-  // props.directLine.webSocket = false
-
+  //if(body.config?.persistent === "conversation"){
+    props.directLine.conversationId = sessionStorage["feedbotConversationId"]
+    props.directLine.webSocket = false
+  //}
 
   // FEEDYOU fetch DL token from bot when no token or secret found
   const remoteConfig =
@@ -79,7 +83,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       const dl = props.directLine || {}
       props.botConnection = new DirectLine({
         ...dl,
-        conversationId: dl.conversationId || sessionStorage["feedbot-conversation-id"],
+        conversationId: dl.conversationId || sessionStorage["feedbotConversationId"],
         token: body.token,
       });
       delete props.directLine;
