@@ -14,13 +14,14 @@ export type Theme = {
   mainColor: string;
   template: any;
   customCss?: string;
-  showSignature?: boolean
+  showSignature?: boolean,
+  enableScreenshotUpload?: boolean
 };
 
 export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
-  channel?: {index?: number, id?: string},
+  channel?: { index?: number, id?: string },
   autoExpandTimeout?: number;
 };
 
@@ -67,12 +68,13 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         token: body.token,
       });
       delete props.directLine;
-      
+
       // TODO configurable template system based on config
       const config = body.config;
       const alwaysVisible = config && config.visibility === 'always'
       const neverVisible = config && config.visibility === 'never'
-      if (!config || neverVisible || (!alwaysVisible && body.testMode && window.location.hash !== "#feedbot-test-mode")) {
+      const fullscreen = props.theme && props.theme.template && props.theme.template.type === 'full-screen'
+      if ((!config && !fullscreen) || neverVisible || (!alwaysVisible && body.testMode && window.location.hash !== "#feedbot-test-mode")) {
         document
           .getElementsByTagName("body")[0]
           .classList.add("feedbot-disabled");
@@ -98,12 +100,22 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
 
         props.theme.showSignature = !config.hideSignature
 
+        props.theme.enableScreenshotUpload = !!config.enableScreenshotUpload
+
         if (config.showInput === "auto") {
           props.disableInputWhenNotNeeded = true;
         }
 
-        if (config.template.autoExpandTimeout > 0) {
+        if (config.template.autoExpandTimeout > 0 && !props.hasOwnProperty("autoExpandTimeout")) {
           props.autoExpandTimeout = config.template.autoExpandTimeout;
+        }
+
+        if (config.introDialogId) {
+          props.introDialog = {id: config.introDialogId}
+        }
+
+        if (config.userData) {
+          // TODO
         }
 
         if (config.customCss) {
@@ -209,8 +221,8 @@ function getStyleForTheme(theme: Theme, remoteConfig: boolean): string {
   return remoteConfig ? ExpandableKnobTheme(theme) : ExpandableBarTheme(theme);
 }
 
-function getSidebarBackgroundColor (theme: Theme) {
-  return '#FFFFFF'
+function getSidebarBackgroundColor(theme: Theme) {
+  return '#e1e1e1'
 
   // TODO make background tint configurable in theme
   /*const color = theme.mainColor
@@ -218,6 +230,10 @@ function getSidebarBackgroundColor (theme: Theme) {
     return rgb2hex(color).hex
   }
   return color*/
+}
+
+export function isSafari() {
+  return !(navigator.userAgent.indexOf("Safari") !== -1 && navigator.userAgent.indexOf("Chrome") !== -1);
 }
 
 const FullScreenTheme = (theme: Theme) => `
@@ -477,11 +493,10 @@ const ExpandableKnobTheme = (theme: Theme) => `
     height: 100%;
     padding: 0px;
 
-    background-image: url(${
-      (theme.template && theme.template.iconUrl)
-        ? theme.template.iconUrl
-        :"https://cdn.feedyou.ai/webchat/message-icon.png"
-    });
+    background-image: url(${(theme.template && theme.template.iconUrl)
+    ? theme.template.iconUrl
+    : "https://cdn.feedyou.ai/webchat/message-icon.png"
+  });
     background-size: 50px 50px;
     background-position: 12px 12px;
     background-repeat: no-repeat;
@@ -495,26 +510,6 @@ const ExpandableKnobTheme = (theme: Theme) => `
     width: 420px;
     height: 565px;
   }
-
-  ${window.location.hash === '#feedbot-feature-screenshot' ? `
-    .wc-upload-screenshot {
-      position: absolute !important;
-      left: 46px !important;
-      height: 40px !important;
-      background-color: transparent !important;
-      border: none !important;
-      color: #8a8a8a;
-      padding: 0;
-    }
-    .wc-upload-screenshot svg {
-      margin: 9px 6px !important;
-      width: 32px;
-      height: 22px;
-    }
-    .wc-console.has-upload-button .wc-textbox {
-      left: 96px !important;
-    }
-  ` : ''}
 
   .feedbot-wrapper.collapsed .feedbot-signature {
     display: none;
@@ -628,7 +623,7 @@ const Sidebar = (theme: Theme) => `
   @supports ((-webkit-backdrop-filter: blur(40px)) or (backdrop-filter: blur(40px))) {
     .feedbot-wrapper {
       max-height: 100%;
-      background: linear-gradient(45deg, ${getSidebarBackgroundColor(theme)}33,  #FFFFFFCE);
+      background: linear-gradient(45deg, ${getSidebarBackgroundColor(theme)}33,  #E1E1E1CE);
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
     }
@@ -654,7 +649,7 @@ const Sidebar = (theme: Theme) => `
   .wc-message-from-bot .wc-message-content {
     border-radius: 0 16px 16px 16px;
     padding: 14px;
-    background: linear-gradient(-45deg, rgba(245,245,245,0.5), rgba(245,245,245,0.9)) !important;
+    background: linear-gradient(-45deg, rgba(255,255,255,0.5), rgba(255,255,255,0.9)) !important;
   }
 
   .wc-message-from-me .wc-message-content {
@@ -1068,6 +1063,31 @@ const BaseTheme = (theme: Theme) => `
     .feedbot-signature {
       display: none;
     }
+
+    .wc-upload-screenshot {
+      display: none !important;
+    }
+  
+    ${theme.enableScreenshotUpload && !isSafari() ? `
+      .wc-upload-screenshot {
+        display: inline-block !important;
+        position: absolute !important;
+        left: 46px !important;
+        height: 40px !important;
+        background-color: transparent !important;
+        border: none !important;
+        color: #8a8a8a;
+        padding: 0;
+      }
+      .wc-upload-screenshot svg {
+        margin: 9px 6px !important;
+        width: 32px;
+        height: 22px;
+      }
+      .wc-console.has-upload-button .wc-textbox {
+        left: 96px !important;
+      }
+    ` : ''}
 
     ${theme.customCss || ""}
   `;
