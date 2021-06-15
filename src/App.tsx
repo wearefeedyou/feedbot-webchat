@@ -16,6 +16,10 @@ export type Theme = {
   customCss?: string;
   showSignature?: boolean,
   enableScreenshotUpload?: boolean
+  partner?: {
+    logoUrl: string,
+    linkUrl: string
+  }
 };
 
 export type AppProps = ChatProps & {
@@ -99,6 +103,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         }
 
         props.theme.showSignature = !config.hideSignature
+        props.theme.partner = { logoUrl: config.partnerSignatureLogoUrl, linkUrl: config.partnerSignatureLinkUrl }
 
         props.theme.enableScreenshotUpload = !!config.enableScreenshotUpload
 
@@ -538,12 +543,14 @@ const ExpandableKnobTheme = (theme: Theme) => `
 
   .feedbot-wrapper .feedbot-signature {
     position: absolute;
-    bottom: -22px;
+    bottom: -23px;
     font-size: 13px;
     right: 11px;
     opacity: 0.50;
     font-family: "Roboto", sans-serif;
-    display: flex;
+
+    height: 22px;
+    display: block;
     align-items: center;
     -webkit-transition: opacity 0.3s ease-in-out;
     -moz-transition: opacity 0.3s ease-in-out;
@@ -560,18 +567,17 @@ const ExpandableKnobTheme = (theme: Theme) => `
     transition: 0.3s;
     color: black;
     text-decoration: none;
-    height: 19px;
-    margin-left: 3px;
-    display: flex;
+    margin: 0 4px;
   }
 
   .feedbot-signature a:hover {
     cursor: pointer;
   }
   .feedbot-signature a img {
-    height: 20px;
-    position: relative;
-    top: -1px;
+    height: 22px;
+  }
+  .feedbot-signature-row{
+    display: flex; 
   }
 
   ${ExpandableBarTheme(theme)}
