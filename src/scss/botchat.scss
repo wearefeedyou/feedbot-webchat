@@ -642,7 +642,7 @@
         }
 
         &.has-upload-button .wc-textbox {
-            left: 48px;
+            left: 160px;
         }
 
         .wc-textbox {
@@ -687,6 +687,10 @@
     }
 
     .wc-console.disable-input {
+        background-color: #ecedef !important;
+    }
+
+    .wc-console.disable-input .wc-textbox, .wc-console.disable-input .wc-send, .wc-console.disable-input .wc-mic {
         display: none;
     }
 

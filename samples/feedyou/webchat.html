@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.feedyou.ai/webchat/latest/botchat.css" rel="stylesheet" />
-  <link href="https://cdn.feedyou.ai/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
+  <link href="https://feedyou.blob.core.windows.net/webchat/feature/skoda/botchat.css" rel="stylesheet" />
+  <link href="https://feedbotskodaonboardi9617.blob.core.windows.net/public/react-drop-zone.css" rel="stylesheet" />
+  <link href="https://feedyou.azureedge.net/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
   <title>Chatbot</title>
   <style>
     html { 
@@ -67,10 +68,6 @@
       padding: 2px 6px;
     }
 
-    .wc-carousel-item .wc-adaptive-card {
-      padding: 0;
-    }
-
     #bot-wrapper {
       background-color: transparent;
       width: 95%;
@@ -80,12 +77,16 @@
       max-height: 98.5%;
       min-height: 500px;
 
+      /* IE11 fix flexbox bug*/
+      left: 50%;
+      transform: translateX(-50%);
+
       display: -ms-flexbox;
-      display: -webkit-flex;
       display: flex;
-      -webkit-flex-direction: column;
       -ms-flex-direction: column;
       flex-direction: column;
+      -ms-flex-pack: center;
+      justify-content: center;
 
       position: absolute;
       bottom: 0;
@@ -94,6 +95,10 @@
     #bot-wrapper #bot {
       position: relative;
       height: 90%;
+    }
+
+    #bot-wrapper .wc-console svg {
+      fill: #2b2b2b
     }
 
     .wc-message-from.wc-message-from-bot {
@@ -162,10 +167,25 @@
     }
 
     .wc-console .attachment-url {
-      max-width: 33%;
+      max-width: 45%;
       padding-right: 5px;
       color: #626262;
       font-size: 85%;
+    }
+
+    .wc-console .attachment-url span {
+      font-weight: bold;
+      padding-top: 5px;
+      display: block;
+    }
+
+    @media (max-width: 450px) {
+      .attachment-wrapper.qr-only a {
+        display: none;
+      }
+      .attachment-wrapper.qr-only .attachment-url {
+        padding-right: 0px !important;
+      }
     }
 
     .attachment-wrapper {
@@ -174,6 +194,37 @@
       align-items: center;
       justify-content: center;
       max-width: 230px;
+      width: 100%;
+    }
+
+    .attachment-wrapper.qr-only {
+      max-width: none !important;
+      justify-content: center !important;
+    }
+    
+    .attachment-wrapper.qr-only .attachment-url {
+      max-width: none;
+      flex: 1;
+      padding-right: 100px;
+    }
+
+    .attachment-wrapper img {
+      height: 90px;
+      position: relative;
+      background-color: white;
+    }
+
+    .attachment-wrapper.qr-only:hover .attachment-url {
+      padding-right: 0px;
+    }
+
+    .attachment-wrapper:hover {
+      max-width: 320px;
+    }
+
+    .attachment-wrapper:hover img {
+      bottom: 27px;
+      height: 190px;
     }
 
     .wc-console.disable-input .attachment-wrapper {
@@ -199,6 +250,10 @@
 
     .wc-console.disable-input.has-upload-button .wc-textbox {
       display: none;
+    }
+
+    .wc-console.disable-input.has-upload-button {
+      display: flex;
     }
 
     .wc-console.disable-input {
@@ -295,6 +350,7 @@
       font-size: 0.7em;
       padding-bottom: 8px;
     }
+
   </style>
 </head>
 
@@ -302,28 +358,35 @@
 
   <div id="bot-wrapper">
     <div id="logo">
-      <img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="Logo" />
+      <img src="https://feedbotskodaonboardi9617.blob.core.windows.net/public/logo.jpg" alt="Logo" />
     </div>
     <div id="bot"></div>
     <div id="footer">Chatbot pracuje s důvěrnými informacemi • Chatbot works with confidential information</div>
   </div>
-  <script src="https://cdn.feedyou.ai/webchat/latest/botchat-es5.js"></script>
+  <script src="https://feedyou.blob.core.windows.net/webchat/feature/skoda/botchat-es5.js?v=4"></script>
   <script>
     const forceInput = window.location.hash.substr(1) === 'feedbot-show-input'
     var botConnection = new BotChat.DirectLine({ secret: '1IfP8oGaUP8.HVHkwo0WQzl90h7zJmiHfQCKENUlpg9x-srjCTorN7A' });
 
     BotChat.App({
-      directLine: { secret: '...' }, // TRY THIS DURING TESTING: flYcEctmv88.cwA.PSk.iaausLq-Qu1ctHCDVtBStyXtukwWaKdmj9Tzp64J8Jo
-      bot: { id: '...', name: 'Chatbot' }, // TRY THESE DURING TESTING: feedbot-demo-webchat
-      theme: { mainColor: '#1f357a' },
-      disableInputWhenNotNeeded: false,
+      botConnection: botConnection,
+      locale: 'cs',
+      bot: { id: 'feedbot-skoda-onboarding', name: 'Chatbot' },
+      theme: { mainColor: '#00800D' },
+      disableInputWhenNotNeeded: !forceInput,
+      userData: {zarizeni: location.hash.substr(1)}, // vlastni-zarizeni   naborove-centrum
+      uploadUsingQrCodeOnly: location.hash.substr(1) == 'naborove-centrum'
       
       // SEE https://github.com/wearefeedyou/feedbot-webchat FOR OPTIONAL PARAMS
     }, document.getElementById("bot"));
 
     botConnection.activity$
-      .filter(activity => activity.type === "event" && activity.name === "reload")
-      .subscribe(activity => location.reload())
+      .filter(function(activity){ return activity.type === "event" && activity.name === "reload" })
+      .subscribe(function(activity){ location.reload() })
+
+    botConnection.activity$
+      .filter(function(activity){ return activity.type === "event" && activity.name === "set-reload-timeout" })
+      .subscribe(function(activity){ setTimeout(function() {location.reload()}, parseInt(activity.value || 60000)) })
   </script>
 </body>
 

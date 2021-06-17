@@ -172,6 +172,8 @@ export interface FormatState {
     chatTitle: boolean | string,
     locale: string,
     showUploadButton: boolean,
+    attachmentUrl: string,
+    uploadUsingQrCodeOnly: boolean,
     disableInput: boolean,
     disableInputWhenNotNeeded: boolean
     strings: Strings,
@@ -190,6 +192,8 @@ export type FormatAction = {
 } | {
     type: 'Toggle_Upload_Button',
     showUploadButton: boolean
+    attachmentUrl?: string
+    uploadUsingQrCodeOnly?: boolean
 } | {
     type: 'Toggle_Disable_Input',
     disableInput: boolean
@@ -203,8 +207,10 @@ export const format: Reducer<FormatState> = (
         chatTitle: true,
         locale: 'en-us',
         showUploadButton: true,
+        attachmentUrl: null,
         disableInput: false,
         disableInputWhenNotNeeded: false,
+        uploadUsingQrCodeOnly: false,
         strings: defaultStrings,
         carouselMargin: undefined
     },
@@ -230,7 +236,9 @@ export const format: Reducer<FormatState> = (
         case 'Toggle_Upload_Button':
             return {
                 ...state,
-                showUploadButton: action.showUploadButton
+                showUploadButton: action.showUploadButton,
+                attachmentUrl: action.attachmentUrl,
+                uploadUsingQrCodeOnly: action.hasOwnProperty('uploadUsingQrCodeOnly') ? action.uploadUsingQrCodeOnly : state.uploadUsingQrCodeOnly
             };
         case 'Toggle_Disable_Input':
             return {
@@ -644,13 +652,17 @@ const speakOnMessageReceivedEpic: Epic<ChatActions, ChatState> = (action$, store
 // TODO do not overwrite Chat.props.showUploadButton=true
 const showUploadBasedOnInputHint: Epic<ChatActions, ChatState> = (action$, store) =>
     action$.ofType('Receive_Message')
-    .map(action => ({ type: 'Toggle_Upload_Button', showUploadButton: action.activity.inputHint === 'expectingUpload' } as FormatAction))
+    .map(action => ({
+        type: 'Toggle_Upload_Button',
+        showUploadButton: action.activity.inputHint === 'expectingUpload',
+        attachmentUrl: action.activity.channelData && action.activity.channelData.attachmentUrl
+    } as FormatAction))
 
 // FEEDYOU disable/hide input prompt only when last message's inputHint=='ignoringInput'
 const disableInputBasedOnInputHint: Epic<ChatActions, ChatState> = (action$, store) => 
     action$.ofType('Receive_Message')
     .filter(action => (action.activity as Message) && store.getState().format.disableInputWhenNotNeeded)
-    .map(action => ({ type: 'Toggle_Disable_Input', disableInput: action.activity.inputHint === 'ignoringInput' } as FormatAction))
+    .map(action => ({ type: 'Toggle_Disable_Input', disableInput: action.activity.inputHint === 'ignoringInput' || action.activity.inputHint === 'expectingUpload' } as FormatAction))
 
 const stopSpeakingEpic: Epic<ChatActions, ChatState> = (action$) =>
     action$.ofType(

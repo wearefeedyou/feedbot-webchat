@@ -3,14 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.feedyou.ai/webchat/latest/botchat.css" rel="stylesheet" />
-  <link href="https://cdn.feedyou.ai/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://feedyou.azureedge.net/webchat/latest/botchat.css" rel="stylesheet" />
+  <link href="https://feedyou.azureedge.net/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
   <title>Chatbot</title>
   <style>
     html { 
       height: 100%;
-      background-color: white;
+      background-color: #e9eff4;
 
       /* background: url('https://feedyou.blob.core.windows.net/webchat/gray-background.jpg') no-repeat center center fixed; 
       -webkit-background-size: cover;
@@ -21,7 +21,8 @@
 
     body {
       font-family: Helvetica, Arial;
-      padding: 30px;
+      padding: 0px;
+      margin: 0px;
 
       display: -ms-flexbox;
       display: -webkit-flex;
@@ -38,21 +39,57 @@
       -webkit-align-items: flex-end;
       -ms-flex-align: end;
       align-items: flex-end;
+
+      width: 100%;
+      height: 100%;
+
+      overflow: hidden;
+    }
+
+    #bg-left-bottom {
+      position: absolute;
+
+      left: calc(10% - 145px);
+      bottom: 10%;
+      width: 8%;
+      max-width: 150px;
+    }
+
+    @media all and (min-width: 1440px) {
+        #bg-left-bottom {
+          left: 0px;
+        }
+    }
+
+    #bg-right-top {
+      position: absolute;
+
+      right: calc(10% - 167px);
+      top: calc(120px + 10%);
+      width: 14%;
+      max-width: 230px;
+    }
+
+    @media all and (min-width: 1440px) {
+        #bg-right-top {
+          right: 0px;
+        }
     }
 
     #logo {
-      height: 15%;
+      height: 110px;
+      width: 100%;
 
-      background-color: transparent;
+      display: flex;
+      justify-content: center;
+
+      background-color: #27235e;
       text-align: center;
-      padding-top: 0px;
-      padding-bottom: 5px;
+      overflow: hidden;
     }
 
     #logo img {
-      max-height: 95%;
-      max-width: 70%;
-      padding-top: 15px;
+      height: 100%;
       object-fit: contain;
     }
     
@@ -67,33 +104,37 @@
       padding: 2px 6px;
     }
 
-    .wc-carousel-item .wc-adaptive-card {
-      padding: 0;
+    #bot {
+      margin-bottom: 50px;
+      z-index: 1000;
     }
 
     #bot-wrapper {
       background-color: transparent;
-      width: 95%;
-      max-width: 900px;
-      min-width: 300px;
-      height: 96%;
-      max-height: 98.5%;
-      min-height: 500px;
-
+      width: 100%;
+      height: 100%;
+      
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
       -webkit-flex-direction: column;
       -ms-flex-direction: column;
       flex-direction: column;
+      align-items: center;
 
       position: absolute;
+      left: 0;
       bottom: 0;
+      overflow: hidden;
     }
 
     #bot-wrapper #bot {
       position: relative;
       height: 90%;
+
+      width: 95%;
+      max-width: 900px;
+      min-width: 300px;
     }
 
     .wc-message-from.wc-message-from-bot {
@@ -122,6 +163,26 @@
       margin-top: 10px;
     }
 
+    .wc-carousel .wc-hscroll {
+      /*display: table;*/
+      border-spacing: 10px;
+    }
+
+    .wc-carousel .wc-hscroll > ul {
+      display: table-row;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li {
+      display: table-cell;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .wc-carousel .wc-hscroll > ul > li .wc-card {
+      background-color: transparent;
+      padding: 0px;
+    }
+
     .wc-suggested-actions .wc-hscroll > ul > li {
       margin: 6px;
     }
@@ -130,7 +191,7 @@
       position: absolute;
       bottom: 0px;
       z-index: 10000;
-      background-color: white;
+      background-color: #e9eff4;
     }
 
     .wc-message-pane.show-actions .wc-suggested-actions {
@@ -144,44 +205,11 @@
 
       border-width: 0px;
       height: 70px;
-      display: flex;
-      align-items: center;
     }
 
-    .wc-console .DropZone {
-      padding: 5px;
-      height: 60px;
-      position: relative;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      margin-right: 10px;
-      display: flex;
-      flex: 1;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wc-console .attachment-url {
-      max-width: 33%;
-      padding-right: 5px;
-      color: #626262;
-      font-size: 85%;
-    }
-
-    .attachment-wrapper {
-      display: flex;
-      flex: 1;
-      align-items: center;
-      justify-content: center;
-      max-width: 230px;
-    }
-
-    .wc-console.disable-input .attachment-wrapper {
-      justify-content: flex-end;
-    }
-
-    .attachment-wrapper span {
-      text-align: center;
+    .wc-app .wc-message-groups {
+      background-color: transparent !important;
+      overflow-y: auto;
     }
 
     .wc-message-pane.show-actions .wc-message-groups {
@@ -189,20 +217,8 @@
       transform: translateY(0px);
     }
 
-    .wc-message-pane.has-upload-button .wc-message-groups {
-      transform: translateY(-30px);
-    }
-
-    .wc-console.has-upload-button {
-      height: 100px;
-    }
-
-    .wc-console.disable-input.has-upload-button .wc-textbox {
-      display: none;
-    }
-
     .wc-console.disable-input {
-      background-color: white !important;
+      background-color: #e9eff4 !important;
     }
 
     #bot .wc-suggested-actions .wc-hscroll > ul > li button, .wc-app .wc-card button {
@@ -214,12 +230,7 @@
     }
 
     .wc-console .wc-mic, .wc-console .wc-send {
-      top: auto;
-      position:relative;
-    }
-    
-    .wc-console .wc-mic.hidden, .wc-console .wc-send.hidden {
-      display: none;
+      top: 10px;
     }
 
     .wc-console input[type=text], .wc-console textarea {
@@ -231,12 +242,7 @@
       background-color: #eceff1;
       height: 70%;
       margin-bottom: 0px;
-      position: relative !important;
-      bottom: auto !important;
-      top: auto !important;
-      left: auto !important;
-      right: auto !important;
-      flex: 1;
+      top: 6px !important;
     }
 
     .wc-suggested-actions .wc-hscroll > ul {
@@ -245,19 +251,27 @@
     }
 
     .wc-message-from-bot .wc-message-content {
-     background-color: #f5f5f5;
+     background-color: #fff;
     }
 
     .wc-message-from-bot svg.wc-message-callout path {
-      fill: #f5f5f5;
+      fill: #fff;
     }
 
     .wc-suggested-actions .wc-hscroll > ul > li {
       max-width: 60%;
     }
 
+    .wc-app .wc-chatview-panel {
+      top: 0px !important;
+    }
+
     .wc-message-content {
      box-shadow: none;
+    }
+
+    .wc-message .format-plain {
+      -webkit-text-size-adjust: none;
     }
 
     .wc-message .wc-list {
@@ -273,57 +287,85 @@
     }
 
     .wc-carousel button.scroll {
-      background-color: #00800D !important;
+      background-color: #49a4da !important;
       border-width: 0px !important;
+
+      /* https://stackoverflow.com/questions/20832531/mobile-safari-positionfixed-z-index-glitch-when-scrolling/20898012 */
+      -webkit-transform:translateZ(1px);
+      -moz-transform:translateZ(1px);
+      -o-transform:translateZ(1px);
+      transform:translateZ(1px);
+      z-index: 100; 
+    }
+
+    .wc-app .wc-card {
+      background-color: #f9f9f9 !important;
+      border-width: 0px;
     }
 
     #bot .wc-suggested-actions .wc-hscroll > ul > li button, .wc-app .wc-card button {
       color: white !important;
-      background-color: #00800D !important;
-      border-color: #00800D !important;
+      background: #4ba6dd;
+      border-color: #49a4da !important;
     }
 
     #bot .wc-suggested-actions .wc-hscroll > ul > li button:active, .wc-app .wc-card button:active {
-      color: #00800D !important;
-      background-color: white !important;
-      border-color: #00800D !important;
+      color: #49a4da !important;
+      background: #4ba6dd;
+      border-color: #49a4da !important;
     }
 
     #footer {
-      text-align: center;
-      color: #888;
-      font-size: 0.7em;
-      padding-bottom: 8px;
+      position: absolute;
+      bottom: 0px;
+
+      height: 50px;
+      width: 100%;
+
+      z-index: 100;
+
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+
+      background-color: #27235e;
+    }
+
+    #footer .bg {
+      object-fit: cover;
+    }
+
+    #footer .logo {
+      position: absolute;
+      right: 17px;
+      width: 100px;
+      top: 14px;
     }
   </style>
 </head>
 
 <body>
-
   <div id="bot-wrapper">
     <div id="logo">
-      <img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="Logo" />
+      <img src="https://feedbotfoxconn20194986.blob.core.windows.net/public/header.png" alt="Logo" />
     </div>
     <div id="bot"></div>
-    <div id="footer">Chatbot pracuje s důvěrnými informacemi • Chatbot works with confidential information</div>
+    <div id="footer"><img class="bg" src="https://feedbotfoxconn20194986.blob.core.windows.net/public/footer.png" /><img class="logo" src="https://feedbotfoxconn20194986.blob.core.windows.net/public/footer-logo.png" /></div>
+    <img id="bg-left-bottom" src="https://feedbotfoxconn20194986.blob.core.windows.net/public/bg-left-bottom.png" />
+    <img id="bg-right-top" src="https://feedbotfoxconn20194986.blob.core.windows.net/public/bg-right-top.png" />
   </div>
-  <script src="https://cdn.feedyou.ai/webchat/latest/botchat-es5.js"></script>
+  
+  <script src="https://feedyou.azureedge.net/webchat/latest/botchat-es5.js"></script>
   <script>
     const forceInput = window.location.hash.substr(1) === 'feedbot-show-input'
-    var botConnection = new BotChat.DirectLine({ secret: '1IfP8oGaUP8.HVHkwo0WQzl90h7zJmiHfQCKENUlpg9x-srjCTorN7A' });
-
     BotChat.App({
-      directLine: { secret: '...' }, // TRY THIS DURING TESTING: flYcEctmv88.cwA.PSk.iaausLq-Qu1ctHCDVtBStyXtukwWaKdmj9Tzp64J8Jo
-      bot: { id: '...', name: 'Chatbot' }, // TRY THESE DURING TESTING: feedbot-demo-webchat
-      theme: { mainColor: '#1f357a' },
-      disableInputWhenNotNeeded: false,
+      directLine: { secret: '-GvRbF7NboA.HkFvh_BceBN0EOsbTdOHZMa9gbG5s9bJdrCs8QJAMMs' },
+      bot: { id: 'feedbot-foxconn-2019', name: 'Chatbot' },
+      theme: { mainColor: '#49a4da' },
+      disableInputWhenNotNeeded: !forceInput,
       
       // SEE https://github.com/wearefeedyou/feedbot-webchat FOR OPTIONAL PARAMS
     }, document.getElementById("bot"));
-
-    botConnection.activity$
-      .filter(activity => activity.type === "event" && activity.name === "reload")
-      .subscribe(activity => location.reload())
   </script>
 </body>
 

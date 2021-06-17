@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.feedyou.ai/webchat/latest/botchat.css" rel="stylesheet" />
-  <link href="https://cdn.feedyou.ai/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
+  <link href="https://feedbotskodaonboardi9617.blob.core.windows.net/public/botchat.css" rel="stylesheet" />
+  <link href="https://feedbotskodaonboardi9617.blob.core.windows.net/public/react-drop-zone.css" rel="stylesheet" />
+  <link href="https://feedyou.azureedge.net/webchat/latest/botchat-fullwindow.css" rel="stylesheet" />
   <title>Chatbot</title>
   <style>
     html { 
@@ -65,10 +66,6 @@
     .wc-adaptive-card {
       border-radius: 8px;
       padding: 2px 6px;
-    }
-
-    .wc-carousel-item .wc-adaptive-card {
-      padding: 0;
     }
 
     #bot-wrapper {
@@ -302,20 +299,20 @@
 
   <div id="bot-wrapper">
     <div id="logo">
-      <img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="Logo" />
+      <img src="https://feedbotskodaonboardi9617.blob.core.windows.net/public/logo.jpg" alt="Logo" />
     </div>
     <div id="bot"></div>
     <div id="footer">Chatbot pracuje s důvěrnými informacemi • Chatbot works with confidential information</div>
   </div>
-  <script src="https://cdn.feedyou.ai/webchat/latest/botchat-es5.js"></script>
+  <script src="../../botchat-es5.js"></script>
   <script>
     const forceInput = window.location.hash.substr(1) === 'feedbot-show-input'
     var botConnection = new BotChat.DirectLine({ secret: '1IfP8oGaUP8.HVHkwo0WQzl90h7zJmiHfQCKENUlpg9x-srjCTorN7A' });
 
     BotChat.App({
-      directLine: { secret: '...' }, // TRY THIS DURING TESTING: flYcEctmv88.cwA.PSk.iaausLq-Qu1ctHCDVtBStyXtukwWaKdmj9Tzp64J8Jo
-      bot: { id: '...', name: 'Chatbot' }, // TRY THESE DURING TESTING: feedbot-demo-webchat
-      theme: { mainColor: '#1f357a' },
+      botConnection,
+      bot: { id: 'feedbot-skoda-onboarding', name: 'Chatbot' },
+      theme: { mainColor: '#00800D' },
       disableInputWhenNotNeeded: false,
       
       // SEE https://github.com/wearefeedyou/feedbot-webchat FOR OPTIONAL PARAMS

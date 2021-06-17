@@ -52,6 +52,7 @@ export interface ChatProps {
     selectedActivity?: BehaviorSubject<ActivityOrID>,
     sendTyping?: boolean,
     showUploadButton?: boolean,
+    uploadUsingQrCodeOnly?: boolean
     disableInputWhenNotNeeded?: boolean,
     formatOptions?: FormatOptions,
     resize?: 'none' | 'window' | 'detect',
@@ -78,6 +79,7 @@ export class Chat extends React.Component<ChatProps, {}> {
     private handoffSubscription: Subscription;
     private webchatCollapseSubscribtion: Subscription;
     private redirectSubscribtion: Subscription;
+    private botEventsSubscribtion: Subscription;
     private connectionStatusSubscription: Subscription;
     private selectedActivitySubscription: Subscription;
     private shellRef: React.Component & ShellFunctions;
@@ -126,7 +128,7 @@ export class Chat extends React.Component<ChatProps, {}> {
             this.store.dispatch<ChatActions>({ type: 'Set_Chat_Title', chatTitle });
         }
 
-        this.store.dispatch<ChatActions>({ type: 'Toggle_Upload_Button', showUploadButton: props.showUploadButton !== false });
+        this.store.dispatch<ChatActions>({ type: 'Toggle_Upload_Button', showUploadButton: props.showUploadButton !== false, uploadUsingQrCodeOnly: !!props.uploadUsingQrCodeOnly });
 
         this.store.dispatch<ChatActions>({ type: 'Toggle_Disable_Input', disableInput: props.disableInputWhenNotNeeded });
 
@@ -327,6 +329,22 @@ export class Chat extends React.Component<ChatProps, {}> {
                 // ignore redirect inside of Designer's Try panel
                 activity.value && !window.hasOwnProperty('API_URL') && (location.href = activity.value)
             })
+        this.botEventsSubscribtion = botConnection.activity$
+            .filter((activity: any) => activity.type === "event" && activity.name.startsWith('webchat-'))
+            .subscribe((activity: any) => {
+                switch (activity.name) {
+                    case 'webchat-collapse':
+                        const wrapper = document.getElementsByClassName('feedbot-wrapper')[0]
+                        wrapper && wrapper.classList.add('collapsed')
+                        break;
+                    case 'webchat-locale':
+                        activity.value && this.store.dispatch<ChatActions>({
+                            type: 'Set_Locale',
+                            locale: activity.value
+                        });
+                        break;
+                }
+            })
 
         // FEEDYOU - send event to bot to tell him webchat was opened - more reliable solution instead of conversationUpdate event
         // https://github.com/Microsoft/BotBuilder/issues/4245#issuecomment-369311452
@@ -354,7 +372,8 @@ export class Chat extends React.Component<ChatProps, {}> {
             let eventName: string
             let dialogId: string
             let userData: object = {}
-            let mode: string
+            let mode: string = ''
+            let cancelDialogId: string = ''
             if (typeof event.detail === 'string') {
                 dialogId = event.detail
                 eventName = 'beginIntroDialog' 
@@ -362,6 +381,7 @@ export class Chat extends React.Component<ChatProps, {}> {
                 dialogId = event.detail.id
                 userData = event.detail.userData || {}
                 mode = event.detail.mode || ''
+                cancelDialogId = event.detail.cancelDialogId || ''
                 eventName = 'beginDialog' // new event supported from bot v1.7.419
             }
             
@@ -371,7 +391,7 @@ export class Chat extends React.Component<ChatProps, {}> {
                     name: eventName,
                     type: 'event',
                     value: '',
-                    channelData: {id: dialogId, userData, mode}
+                    channelData: {id: dialogId, userData, mode, cancelDialogId}
                 }).subscribe(function (id: any) {
                     konsole.log('"'+eventName+'" event sent', dialogId, userData, mode);
                 });
@@ -462,6 +482,7 @@ export class Chat extends React.Component<ChatProps, {}> {
         // this.handoffSubscription.unsubscribe();
         this.webchatCollapseSubscribtion.unsubscribe();
         this.redirectSubscribtion.unsubscribe();
+        this.botEventsSubscribtion.unsubscribe();
         this.connectionStatusSubscription.unsubscribe();
         this.activitySubscription.unsubscribe();
         if (this.selectedActivitySubscription)
