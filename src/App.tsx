@@ -38,7 +38,6 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
 
   //if(body.config?.persistent === "user" || body.config?.persistent === "conversation" ){
     if(sessionStorage.getItem("feedbotUserId")){
-      console.log("hello")
       props.user.id = sessionStorage.getItem("feedbotUserId")
     } else {
       props.user.id = MakeId()

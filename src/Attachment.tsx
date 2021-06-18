@@ -153,7 +153,6 @@ export const AttachmentView = (props: {
     if (!props.attachment) return;
     const attachment = props.attachment as KnownMedia;
     const onCardAction = (cardAction: CardAction) => {
-        console.log(cardAction)
         return cardAction && ((e: React.MouseEvent<HTMLElement>) => {
             props.onCardAction(cardAction.type, cardAction.value);
             e.stopPropagation();

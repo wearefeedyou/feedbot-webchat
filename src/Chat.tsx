@@ -546,12 +546,10 @@ export const doCardAction = (
     type,
     actionValue
 ) => {
-    console.log("volám doCardAction")
 
     const text = (typeof actionValue === 'string') ? actionValue as string : undefined;
     const value = (typeof actionValue === 'object')? actionValue as object : undefined;
 
-    console.log("buttonType:",type)
     switch (type) {
         case "imBack":
             if (typeof text === 'string')
@@ -563,7 +561,6 @@ export const doCardAction = (
             break;
 
         case "playAudio":
-            console.log("PARTY OR DIE!")
             window.location.href = text
             break;
         case "call":
