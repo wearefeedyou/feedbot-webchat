@@ -36,7 +36,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
     id: props.user && props.user.id ? "" + props.user.id : MakeId(),
   };
 
-  //if(body.config?.persistent === "user" || body.config?.persistent === "conversation" ){
+  if(body.config?.persistent === "user" || body.config?.persistent === "conversation" ){
     if(sessionStorage.getItem("feedbotUserId")){
       props.user.id = sessionStorage.getItem("feedbotUserId")
     } else {
@@ -44,12 +44,12 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       sessionStorage.setItem("feedbotUserId", props.user.id)
     }
     
-  //}
+  }
 
-  //if(body.config?.persistent === "conversation"){
+  if(body.config?.persistent === "conversation"){
     props.directLine.conversationId = sessionStorage["feedbotConversationId"]
     props.directLine.webSocket = false
-  //}
+  }
 
   // FEEDYOU fetch DL token from bot when no token or secret found
   const remoteConfig =
