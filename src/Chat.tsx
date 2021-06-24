@@ -534,7 +534,7 @@ export class Chat extends React.Component<ChatProps, {}> {
 }
 
 export interface IDoCardAction {
-    (type: CardActionTypes | "changeUrl", value: string | object): void;
+    (type: CardActionTypes, value: string | object): void;
 }
 
 export const doCardAction = (
@@ -559,12 +559,11 @@ export const doCardAction = (
         case "postBack":
             sendPostBack(botConnection, text, value, from, locale);
             break;
-
-        case "playAudio":
-            window.location.href = text
-            break;
+                
+        
         case "call":
         case "openUrl":
+        case "playAudio":
         case "playVideo":
         case "showImage":
         case "downloadFile":

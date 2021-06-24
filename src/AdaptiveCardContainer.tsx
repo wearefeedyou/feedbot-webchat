@@ -9,7 +9,6 @@ import { AjaxResponse, AjaxRequest } from 'rxjs/observable/dom/AjaxObservable';
 import * as adaptivecardsHostConfig from '../adaptivecards-hostconfig.json';
 import * as konsole from './Konsole';
 import { ChatState, AdaptiveCardsState } from './Store';
-import {ChangeUrlAction} from "./ChangeUrlAction"
 
 export interface Props {
     className?: string,
@@ -101,8 +100,6 @@ class AdaptiveCardContainer extends React.Component<Props, State> {
 
     private onExecuteAction(action: Action) {
         if (action instanceof OpenUrlAction) {
-            window.location.href = action.url
-        } else if (action instanceof OpenUrlAction) {
             window.open(action.url);
         } else if (action instanceof SubmitAction) {
             if (action.data !== undefined) {
@@ -114,7 +111,7 @@ class AdaptiveCardContainer extends React.Component<Props, State> {
                     this.props.onCardAction(typeof action.data === 'string' ? 'imBack' : 'postBack', action.data);
                 }
             }
-        } 
+        }
     }
 
     componentDidMount() {
