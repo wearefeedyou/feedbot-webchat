@@ -9,6 +9,7 @@ import { AjaxResponse, AjaxRequest } from 'rxjs/observable/dom/AjaxObservable';
 import * as adaptivecardsHostConfig from '../adaptivecards-hostconfig.json';
 import * as konsole from './Konsole';
 import { ChatState, AdaptiveCardsState } from './Store';
+import {getFeedyouParam} from "./FeedyouParams"
 
 export interface Props {
     className?: string,
@@ -100,7 +101,22 @@ class AdaptiveCardContainer extends React.Component<Props, State> {
 
     private onExecuteAction(action: Action) {
         if (action instanceof OpenUrlAction) {
-            window.open(action.url);
+            const openUrlTarget = getFeedyouParam("openUrlTarget")
+            console.log(openUrlTarget)
+            
+            if(openUrlTarget === "same-domain"){
+                const url = new URL(action.url)
+                if(window.location.hostname === url.hostname){
+                    window.location.href = url.href;
+                }else{
+                    window.open(action.url);
+                }
+            }
+            else if(openUrlTarget === "same"){
+                window.location.href = action.url
+            } else {
+                window.open(action.url);
+            }
         } else if (action instanceof SubmitAction) {
             if (action.data !== undefined) {
                 if (typeof action.data === 'object' && (action.data as BotFrameworkCardAction).__isBotFrameworkCardAction) {

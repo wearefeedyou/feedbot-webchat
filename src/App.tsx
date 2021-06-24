@@ -9,6 +9,7 @@ import {
 import { DirectLine } from "botframework-directlinejs";
 import * as konsole from "./Konsole";
 import * as rgb2hex from "rgb2hex"
+import {setFeedyouParam} from "./FeedyouParams"
 
 export type Theme = {
   mainColor: string;
@@ -23,33 +24,21 @@ export type AppProps = ChatProps & {
   header?: { textWhenCollapsed?: string; text: string };
   channel?: { index?: number, id?: string },
   autoExpandTimeout?: number;
+  openUrlTarget: "new" | "same" | "same-domain"
 };
 
 export const App = async (props: AppProps, container?: HTMLElement) => {
   konsole.log("BotChat.App props", props);
 
   // FEEDYOU generate user ID if not present in props, make sure its always string
-  
   props.user = {
     name: "Uživatel",
     ...props.user,
     id: props.user && props.user.id ? "" + props.user.id : MakeId(),
   };
 
-  if(body.config?.persist === "user" || body.config?.persist === "conversation" ){
-    if(sessionStorage.getItem("feedbotUserId")){
-      props.user.id = sessionStorage.getItem("feedbotUserId")
-    } else {
-      props.user.id = MakeId()
-      sessionStorage.setItem("feedbotUserId", props.user.id)
-    }
-    
-  }
 
-  if(body.config?.persist === "conversation"){
-    props.directLine.conversationId = sessionStorage["feedbotConversationId"]
-    props.directLine.webSocket = false
-  }
+  
 
   // FEEDYOU fetch DL token from bot when no token or secret found
   const remoteConfig =
@@ -79,10 +68,26 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       const body = await response.json();
       console.log("Token response", body);
 
-      const dl = props.directLine || {}
+      setFeedyouParam("openUrlTarget", body.config.openUrlTarget)
+
+      if(body.config.persist === "user" || body.config.persist === "conversation" ){
+        if(sessionStorage.getItem("feedbotUserId")){
+          props.user.id = sessionStorage.getItem("feedbotUserId")
+        } else {
+          props.user.id = MakeId()
+          sessionStorage.setItem("feedbotUserId", props.user.id)
+        }
+      }
+    
+      if(body.config.persist === "conversation"){
+        props.directLine.conversationId = sessionStorage["feedbotConversationId"]
+        props.directLine.webSocket = false
+      }
+
+      const directLine = props.directLine || {}
       props.botConnection = new DirectLine({
-        ...dl,
-        conversationId: dl.conversationId || sessionStorage["feedbotConversationId"],
+        ...directLine,
+        conversationId: directLine.conversationId || sessionStorage["feedbotConversationId"],
         token: body.token,
       });
       delete props.directLine;

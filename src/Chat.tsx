@@ -560,7 +560,6 @@ export const doCardAction = (
             sendPostBack(botConnection, text, value, from, locale);
             break;
                 
-        
         case "call":
         case "openUrl":
         case "playAudio":
