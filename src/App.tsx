@@ -103,7 +103,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         }
 
         props.theme.showSignature = !config.hideSignature
-        props.theme.partner = { logoUrl: config.partnerSignatureLogoUrl, linkUrl: config.partnerSignatureLinkUrl }
+        props.theme.signature = config.signature || {}
 
         props.theme.enableScreenshotUpload = !!config.enableScreenshotUpload
 
