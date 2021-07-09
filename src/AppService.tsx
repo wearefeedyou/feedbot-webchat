@@ -14,12 +14,15 @@ export function renderExpandableTemplate(props: AppProps) {
 
   const signature = document.createElement("div");
   signature.classList.add("feedbot-signature");
-  if(props.theme?.signature?.partnerLogoUrl && props.theme?.signature?.mode === "both"){
-    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${props.theme.signature?.partnerLinkUrl}"><img src="${props.theme.signature?.partnerLogoUrl}" alt="logo" /></a><div style="align-self: center;">&</div><a class="signature-link" target="_blank" href="https://feedyou.ai/?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
-  } else if(props.theme?.signature?.partnerLogoUrl && props.theme?.signature?.mode === "partner") {
-    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${props.theme.signature?.partnerLinkUrl}"><img src="${props.theme.signature?.partnerLogoUrl}" alt="logo" /></a></div>`;
-  } else if (props.theme?.signature?.mode === "feedyou"){
-    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="https://feedyou.ai/?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
+
+  const feedyouLinkUrl = `https://feedyou.ai/?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}`
+  const partnerLinkUrl = props.theme.signature.partnerLinkUrl ? `${props.theme.signature.partnerLinkUrl}?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}` : feedyouLinkUrl
+  if(props.theme && props.theme.signature && props.theme.signature.partnerLogoUrl && props.theme.signature.mode === "both"){
+    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${partnerLinkUrl}"><img style="${props.theme.signature.partnerLogoStyle || ''}" src="${props.theme.signature.partnerLogoUrl}" alt="logo" /></a><div style="align-self: center;">&</div><a class="signature-link" target="_blank" href="${feedyouLinkUrl}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
+  } else if(props.theme && props.theme.signature && props.theme.signature.partnerLogoUrl && props.theme.signature.mode === "partner") {
+    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${partnerLinkUrl}"><img style="${props.theme.signature.partnerLogoStyle || ''}" src="${props.theme.signature.partnerLogoStyle || ''}" alt="logo" /></a></div>`;
+  } else {
+    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${feedyouLinkUrl}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
   }
 
   const header = document.createElement("div");

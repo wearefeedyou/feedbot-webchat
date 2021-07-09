@@ -18,6 +18,7 @@ export type Theme = {
   enableScreenshotUpload?: boolean
   signature?: {
     partnerLogoUrl: string,
+    partnerLogoStyle: string,
     partnerLinkUrl: string,
     mode: string
   }
