@@ -102,7 +102,6 @@ class AdaptiveCardContainer extends React.Component<Props, State> {
     private onExecuteAction(action: Action) {
         if (action instanceof OpenUrlAction) {
             const openUrlTarget = getFeedyouParam("openUrlTarget")
-            console.log(openUrlTarget)
             
             if(openUrlTarget === "same-domain"){
                 const url = new URL(action.url)

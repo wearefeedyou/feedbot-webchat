@@ -22,9 +22,10 @@ export type Theme = {
 export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
-  channel?: { index?: number, id?: string },
+  channel?: { index?: number, id?: string };
   autoExpandTimeout?: number;
-  openUrlTarget: "new" | "same" | "same-domain"
+  openUrlTarget: "new" | "same" | "same-domain";
+  persist?: "user" | "conversation" | "none";
 };
 
 export const App = async (props: AppProps, container?: HTMLElement) => {
@@ -68,7 +69,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       const body = await response.json();
       console.log("Token response", body);
 
-      setFeedyouParam("openUrlTarget", body.config.openUrlTarget)
+      setFeedyouParam("openUrlTarget", props.persist || body.config.openUrlTarget)
 
       if(body.config.persist === "user" || body.config.persist === "conversation" ){
         if(sessionStorage.getItem("feedbotUserId")){
