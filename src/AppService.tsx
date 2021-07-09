@@ -14,9 +14,11 @@ export function renderExpandableTemplate(props: AppProps) {
 
   const signature = document.createElement("div");
   signature.classList.add("feedbot-signature");
-  if(props.theme.partner){
-    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${props.theme.partner.linkUrl}"><img src="${props.theme.partner.logoUrl}" alt="logo" /></a><div style="align-self: center;">&</div><a class="signature-link" target="_blank" href="https://feedyou.ai/?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
-  }else{
+  if(props.theme?.signature?.partnerLogoUrl && props.theme?.signature?.mode === "both"){
+    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${props.theme.signature?.partnerLinkUrl}"><img src="${props.theme.signature?.partnerLogoUrl}" alt="logo" /></a><div style="align-self: center;">&</div><a class="signature-link" target="_blank" href="https://feedyou.ai/?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
+  } else if(props.theme?.signature?.partnerLogoUrl && props.theme?.signature?.mode === "partner") {
+    signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="${props.theme.signature?.partnerLinkUrl}"><img src="${props.theme.signature?.partnerLogoUrl}" alt="logo" /></a></div>`;
+  } else if (props.theme?.signature?.mode === "feedyou"){
     signature.innerHTML = `<div class="feedbot-signature-row"><div style="align-self: center;">with ❤️ by</div><a class="signature-link" target="_blank" href="https://feedyou.ai/?utm_source=webchat&utm_medium=chatbot&utm_campaign=${props.bot.id}"><img src="https://cdn.feedyou.ai/webchat/feedyou_logo_red.png" alt="logo" /></a></div>`;
   }
 
