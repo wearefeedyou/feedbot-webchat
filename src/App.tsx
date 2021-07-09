@@ -16,9 +16,10 @@ export type Theme = {
   customCss?: string;
   showSignature?: boolean,
   enableScreenshotUpload?: boolean
-  partner?: {
-    logoUrl: string,
-    linkUrl: string
+  signature?: {
+    partnerLogoUrl: string,
+    partnerLinkUrl: string,
+    mode: string
   }
 };
 
