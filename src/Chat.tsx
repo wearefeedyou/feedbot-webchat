@@ -322,7 +322,7 @@ export class Chat extends React.Component<ChatProps, {}> {
 
         // FEEDYOU - send event to bot to tell him webchat was opened - more reliable solution instead of conversationUpdate event
         // https://github.com/Microsoft/BotBuilder/issues/4245#issuecomment-369311452
-        if (!this.props.directLine || !this.props.directLine.conversationId) {
+        if ((!this.props.directLine || !this.props.directLine.conversationId) && (!this.props.botConnection || !((this.props.botConnection as any).conversationId))) {
             let introDialogId = this.props.introDialog && this.props.introDialog.id ? this.props.introDialog.id : undefined
             if (window.location.hash.startsWith('#feedbot-intro-dialog=')) {
                 introDialogId = window.location.hash.substr(22)

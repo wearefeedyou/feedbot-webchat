@@ -34,12 +34,8 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
   // FEEDYOU generate user ID if not present in props, make sure its always string
   props.user = {
     name: "Uživatel",
-    ...props.user,
-    id: props.user && props.user.id ? "" + props.user.id : MakeId(),
+    ...props.user
   };
-
-
-  
 
   // FEEDYOU fetch DL token from bot when no token or secret found
   const remoteConfig =
@@ -69,9 +65,10 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       const body = await response.json();
       console.log("Token response", body);
 
-      setFeedyouParam("openUrlTarget", props.persist || body.config.openUrlTarget)
-
-      if(body.config.persist === "user" || body.config.persist === "conversation" ){
+      setFeedyouParam("openUrlTarget", props.openUrlTarget || body.config.openUrlTarget)
+      
+      const persist = props.persist || body.config.persist
+      if(persist === "user" || persist === "conversation" ){
         if(sessionStorage.getItem("feedbotUserId")){
           props.user.id = sessionStorage.getItem("feedbotUserId")
         } else {
@@ -80,15 +77,19 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
         }
       }
     
-      if(body.config.persist === "conversation"){
-        props.directLine.conversationId = sessionStorage["feedbotConversationId"]
-        props.directLine.webSocket = false
+      const directLine = props.directLine || {}
+      if(persist === "conversation"){
+        if (sessionStorage.getItem("feedbotDirectLineToken")) {
+          body.token = sessionStorage.getItem("feedbotDirectLineToken")
+        } else {
+          sessionStorage.setItem("feedbotDirectLineToken", body.token)
+        }
+        directLine.conversationId = sessionStorage["feedbotConversationId"]
+        directLine.webSocket = false
       }
 
-      const directLine = props.directLine || {}
       props.botConnection = new DirectLine({
         ...directLine,
-        conversationId: directLine.conversationId || sessionStorage["feedbotConversationId"],
         token: body.token,
       });
       delete props.directLine;
@@ -161,6 +162,8 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       return;
     }
   }
+
+  props.user.id = props.user.id ? String(props.user.id) : MakeId()
 
   // FEEDYOU props defaults
   props.showUploadButton = props.hasOwnProperty("showUploadButton")
