@@ -465,7 +465,7 @@ const FullScreenTheme = (theme: Theme) => `
 const ExpandableKnobTheme = (theme: Theme) => `
   body .feedbot-wrapper {
     bottom: 24px;
-    right: calc(10px + 1vw);
+    right: 24px;
     border-radius: 15px;
   }
 
