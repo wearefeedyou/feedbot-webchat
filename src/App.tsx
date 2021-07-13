@@ -9,6 +9,7 @@ import {
 import { DirectLine } from "botframework-directlinejs";
 import * as konsole from "./Konsole";
 import * as rgb2hex from "rgb2hex"
+import {setFeedyouParam} from "./FeedyouParams"
 
 export type Theme = {
   mainColor: string;
@@ -27,8 +28,10 @@ export type Theme = {
 export type AppProps = ChatProps & {
   theme?: Theme;
   header?: { textWhenCollapsed?: string; text: string };
-  channel?: { index?: number, id?: string },
+  channel?: { index?: number, id?: string };
   autoExpandTimeout?: number;
+  openUrlTarget: "new" | "same" | "same-domain";
+  persist?: "user" | "conversation" | "none";
 };
 
 export const App = async (props: AppProps, container?: HTMLElement) => {
@@ -37,8 +40,7 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
   // FEEDYOU generate user ID if not present in props, make sure its always string
   props.user = {
     name: "Uživatel",
-    ...props.user,
-    id: props.user && props.user.id ? "" + props.user.id : MakeId(),
+    ...props.user
   };
 
   // FEEDYOU fetch DL token from bot when no token or secret found
@@ -69,8 +71,37 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       const body = await response.json();
       console.log("WebChat init", body);
 
+      setFeedyouParam("openUrlTarget", props.openUrlTarget || body.config.openUrlTarget)
+      
+      const persist = props.persist || body.config.persist
+      if(persist === "user" || persist === "conversation" ){
+        if(sessionStorage.getItem("feedbotUserId")){
+          props.user.id = sessionStorage.getItem("feedbotUserId")
+        } else {
+          props.user.id = MakeId()
+          sessionStorage.setItem("feedbotUserId", props.user.id)
+        }
+      }
+    
+      const directLine = props.directLine || {}
+      if(persist === "conversation"){
+        const feedbotConversationExpiration = new Date().getTime() + 60 * 60 * 1000
+        sessionStorage.setItem("feedbotConversationExpiration", String(feedbotConversationExpiration))
+        if (sessionStorage.getItem("feedbotDirectLineToken") && new Date().getTime() < parseInt(sessionStorage.getItem("feedbotConversationExpiration"))) {
+          body.token = sessionStorage.getItem("feedbotDirectLineToken")
+        } else {
+          sessionStorage.setItem("feedbotDirectLineToken", body.token)
+        }
+
+        if(sessionStorage.getItem("feedbotConversationId") && new Date().getTime() < parseInt(sessionStorage.getItem("feedbotConversationExpiration"))) {
+          directLine.conversationId = sessionStorage["feedbotConversationId"]
+          directLine.webSocket = false
+        }
+        
+      }
+
       props.botConnection = new DirectLine({
-        ...(props.directLine || {}),
+        ...directLine,
         token: body.token,
       });
       delete props.directLine;
@@ -157,6 +188,8 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
       return;
     }
   }
+
+  props.user.id = props.user.id ? String(props.user.id) : MakeId()
 
   // FEEDYOU props defaults
   props.showUploadButton = props.hasOwnProperty("showUploadButton")
