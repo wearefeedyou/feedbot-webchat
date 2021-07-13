@@ -79,13 +79,19 @@ export const App = async (props: AppProps, container?: HTMLElement) => {
     
       const directLine = props.directLine || {}
       if(persist === "conversation"){
-        if (sessionStorage.getItem("feedbotDirectLineToken")) {
+        const feedbotConversationExpiration = new Date().getTime() + 60 * 60 * 1000
+        sessionStorage.setItem("feedbotConversationExpiration", String(feedbotConversationExpiration))
+        if (sessionStorage.getItem("feedbotDirectLineToken") && new Date().getTime() < parseInt(sessionStorage.getItem("feedbotConversationExpiration"))) {
           body.token = sessionStorage.getItem("feedbotDirectLineToken")
         } else {
           sessionStorage.setItem("feedbotDirectLineToken", body.token)
         }
-        directLine.conversationId = sessionStorage["feedbotConversationId"]
-        directLine.webSocket = false
+
+        if(sessionStorage.getItem("feedbotConversationId") && new Date().getTime() < parseInt(sessionStorage.getItem("feedbotConversationExpiration"))) {
+          directLine.conversationId = sessionStorage["feedbotConversationId"]
+          directLine.webSocket = false
+        }
+        
       }
 
       props.botConnection = new DirectLine({
